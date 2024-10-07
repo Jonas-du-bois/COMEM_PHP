@@ -6,3 +6,5 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+# Fichier à ignorer
+/ProgServ2/Exercice/passwords.txt
