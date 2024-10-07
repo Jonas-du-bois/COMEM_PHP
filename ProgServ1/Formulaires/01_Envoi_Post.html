@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Envoi avec méthode Post</title>
+    </head>
+    <body>
+        <!-- action permet de définir la page vers laquelle on envoye les données du formulaire -->
+        <!-- method permet de définir comment les données sont transmises -->
+        <!-- POST transmet les paires nom-valeur dans le corps du message HTTP (invisible à l'utilisateur) -->
+        <!-- POST sert à transmettre des données potentiellement volumineuses, des données confidentielles (mot de passe) -->
+        <!-- LA METHODE POST EST LA METHODE RECOMMANDEE POUR LES FORMULAIRES -->
+        <form action='01_Reception_Post.php' method='post'>
+            <div>
+                Entrez votre nom :
+                <input type='text' name='nom'>
+            </div>
+            <div>
+                Entrez votre prenom :
+                <input type='text' name='prenom'>
+            </div>
+            <div>
+                <input type='submit' name='submit' value='envoyer'>
+            </div>
+        </form>
+    </body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Upload de fichier</title>
+    </head>
+    <body>
+        <p>Veuillez séléctionner le fichier à uploader :</p>
+        <form action="10_Reception_Fichier.php" method="post" enctype='multipart/form-data'>
+            <div>
+                <input type="file" name="fichier" accept=".txt,.csv">
+            </div>
+            <div>
+                <input type="submit" name="submit" value="envoyer">
+            </div>
+        </form>
+    </body>
+</html>
