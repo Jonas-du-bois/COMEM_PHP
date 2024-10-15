@@ -5,22 +5,22 @@ require_once 'PasswordCheck.php';
 class MotDePasseAleatoire {
 
     // Génère des caractères spéciaux aléatoires
-    public static function genererCarSpeciaux(int $nb = 0) {
+    public static function genererCarSpeciaux(int $nb) {
         return self::randomizer($nb, '!@#$%^&*()_+-=[]{}|;:,.<>?');
     }
 
     // Génère des chiffres aléatoires
-    public static function genererChiffres(int $nb = 0) {
+    public static function genererChiffres(int $nb) {
         return self::randomizer($nb, '0123456789');
     }
 
     // Génère des lettres minuscules aléatoires
-    public static function genererMinuscules(int $nb = 0) {
+    public static function genererMinuscules(int $nb) {
         return self::randomizer($nb, 'abcdefghijklmnopqrstuvwxyz');
     }
 
     // Génère des lettres majuscules aléatoires
-    public static function genererMajuscules(int $nb = 0) {
+    public static function genererMajuscules(int $nb) {
         return self::randomizer($nb, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
     }
 
