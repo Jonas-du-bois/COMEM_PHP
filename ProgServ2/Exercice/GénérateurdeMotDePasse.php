@@ -49,7 +49,7 @@
                 $nbMajuscules = filter_input(INPUT_POST, 'nbMajuscules', FILTER_VALIDATE_INT, $options);
 
                 // Vérifie si les valeurs sont valides
-                if ($nbCarSpeciaux === false || $nbChiffres === false || $nbMinuscules === false || $nbMajuscules === false) {
+                if (!$nbCarSpeciaux || !$nbChiffres|| !$nbMinuscules || !$nbMajuscules ) {
                     // Affiche un message d'erreur si les valeurs ne sont pas valides
                     echo "<script>
                     document.getElementById('result').innerHTML = '<div class=\"result\">Veuillez entrer des valeurs valides pour tous les champs.</div>';

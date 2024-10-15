@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,9 +11,9 @@
         <nav>
             <ul>
                 <li><a href="index.php">Page 1</a></li>
-                <li><a href="page2.html">Page 2</a></li>
-                <li><a href="login.html">Se connecter</a></li>
-                <li><a href="signup.html">S'inscrire</a></li>
+                <li><a href="page2_protected.php">Page 2</a></li>
+                <li><a href="login.php">Se connecter</a></li>
+                <li><a href="signup.php">S'inscrire</a></li>
             </ul>
         </nav>
     </header>
@@ -24,7 +24,7 @@
     </main>
     
     <footer>
-        <p>&copy; 2024 Votre Nom ou Entreprise</p>
+        <p>Jonas Du Bois 2024, en galère</p>
     </footer>
 </body>
 </html>
@@ -36,7 +36,5 @@ require_once('./config/autoload.php');
 
 use ch\comem\DbManagerCRUD;
 use ch\comem\Personne;
-
-
 
 ?>
