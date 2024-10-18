@@ -34,7 +34,31 @@
 //phpinfo();
 require_once('./config/autoload.php');
 
-use ch\comem\DbManagerCRUD;
-use ch\comem\Personne;
+use dbManager\DbManagerCRUD;
+use dbManager\Personne;
+
+$db = new DbManagerCRUD();
+if ($db->creeTablePersonnes()) {
+    echo "Création de la table 'personnes' réussie, tu gères BG !! <br>";
+}
+$user1 = new Personne("Philipe", "Catrine", "Philipe.c@gmail.com", "078'933'81'41");
+
+$user2 = new Personne("Philipo", "Catrino", "Philipe.c@gmail.com", "078'933'81'41");
+
+$id = $db->ajoutePersonne($user1);
+if ($id>0) {
+    echo "Philipe Caterine a bien été ajouté à la base de données <br>";
+}else {
+    echo "Strange";
+};
+
+
+$id = $db->ajoutePersonne($user2);
+if ($id>0) {
+    echo "Philipo Caterino a bien été ajouté à la base de données <br>";
+}else {
+    echo "Strange";
+};
+
 
 ?>

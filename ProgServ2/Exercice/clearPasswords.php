@@ -9,6 +9,6 @@ if (isset($_POST['clear'])) {
 
     // Message de confirmation
     echo "<script>alert('Le fichier de mots de passe a été vidé.');</script>";
-    echo "<script>window.location.href = 'GénérateurdeMotDePasse.php';</script>";
+    echo "<script>window.location.href = 'index.php';</script>";
 }
 ?>

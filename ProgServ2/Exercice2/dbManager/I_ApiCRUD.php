@@ -1,6 +1,6 @@
 <?php
 
-namespace ch\comem;
+namespace dbManager;
 
 interface I_ApiCRUD {
     public function creeTablePersonnes(): bool;

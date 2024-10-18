@@ -3,6 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="styleSheet.css" />
         <title>Générateur de mot de passe</title>
     </head>
@@ -10,7 +11,7 @@
     <body>
         <br>
         <h2>Attention nombre de caractère max 255 et min 0</h2>
-        <form action="GénérateurdeMotDePasse.php" method="post">
+        <form action="index.php" method="post">
             <label for="nbCarSpeciaux">Nombre de caractères spéciaux :</label>
             <input type="number" min="0" max="255" id="nbCarSpeciaux" name="nbCarSpeciaux">
             <label for="nbChiffres">Nombre de chiffres (0-9) :</label>
@@ -49,7 +50,7 @@
                 $nbMajuscules = filter_input(INPUT_POST, 'nbMajuscules', FILTER_VALIDATE_INT, $options);
 
                 // Vérifie si les valeurs sont valides
-                if (!$nbCarSpeciaux || !$nbChiffres|| !$nbMinuscules || !$nbMajuscules ) {
+                if (!$nbCarSpeciaux || !$nbChiffres || !$nbMinuscules || !$nbMajuscules) {
                     // Affiche un message d'erreur si les valeurs ne sont pas valides
                     echo "<script>
                     document.getElementById('result').innerHTML = '<div class=\"result\">Veuillez entrer des valeurs valides pour tous les champs.</div>';
@@ -66,6 +67,6 @@
             }
             ?>
 
-    </body>
+            </body>
 
-</html>
+            </html>

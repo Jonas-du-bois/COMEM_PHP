@@ -1,6 +1,5 @@
 <?php
-
-namespace ch\comem;
+namespace dbManager;
 
 use \Exception;
 
@@ -12,7 +11,7 @@ use \Exception;
  *  - un email
  *  - un numéro de téléphone
  */
-class Personne {
+class Users {
 
     private $id;
     private $nom;

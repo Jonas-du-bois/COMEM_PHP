@@ -1,6 +1,6 @@
 <?php
 
-namespace ch\comem;
+namespace dbManager;
 
 class DbManagerCRUD implements I_ApiCRUD {
 

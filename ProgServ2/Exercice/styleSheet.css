@@ -1,3 +1,4 @@
+/* Style de base */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
@@ -7,8 +8,10 @@ body {
     height: 100vh;
     margin: 0;
     padding: 20px;
+    box-sizing: border-box;
 }
 
+/* Style général du formulaire */
 form {
     background-color: #fff;
     padding: 20px;
@@ -91,4 +94,40 @@ button {
 
 button:hover {
     background-color: #d32f2f;
+}
+
+/* --- Responsive styles using media queries --- */
+
+/* Écran mobile (max-width: 600px) */
+@media (max-width: 600px) {
+    form {
+        max-width: 100%; /* Le formulaire prend tout l'espace disponible */
+        padding: 15px;
+    }
+
+    input[type="submit"], button {
+        font-size: 14px; /* Taille du texte réduite pour les petits écrans */
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 18px; /* Réduction de la taille des titres */
+    }
+
+    .result {
+        font-size: 14px; /* Réduction de la taille du texte de résultat */
+    }
+}
+
+/* Écran de tablette (min-width: 601px et max-width: 1024px) */
+@media (min-width: 601px) and (max-width: 1024px) {
+    form {
+        max-width: 80%; /* Formulaire légèrement plus grand sur les tablettes */
+        padding: 20px;
+    }
+
+    input[type="submit"], button {
+        font-size: 15px;
+        padding: 12px;
+    }
 }
