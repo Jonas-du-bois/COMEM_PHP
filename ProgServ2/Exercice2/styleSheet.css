@@ -9,10 +9,10 @@
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    background-color: #f4f4f4; /* Couleur de fond douce */
+    background-color: #f4f4f4;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* S'assurer que le body prend toute la hauteur de l'écran */
+    min-height: 100vh;
 }
 
 /* ------------------------ Style pour l'en-tête ---------------------------- */
@@ -25,39 +25,39 @@ header {
     z-index: 1000;
 }
 
-/*-------------------- Style pour les liens dans les messages -------------------*/
+/*------------------- Style pour les liens dans les messages ------------------*/
 p a {
-    color: #3498db; /* Couleur bleue élégante */
-    text-decoration: none; /* Pas de soulignement par défaut */
-    font-weight: bold; /* Texte en gras */
-    border-bottom: 2px solid transparent; /* Bordure sous le lien, initialement invisible */
-    transition: all 0.3s ease; /* Transition douce pour les changements */
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
 }
 
 p a:hover {
-    color: #e74c3c; /* Changer de couleur au survol (rouge élégant) */
-    border-bottom: 2px solid #e74c3c; /* Soulignement visible au survol */
-    padding-bottom: 2px; /* Légère distance entre le texte et la bordure */
+    color: #e74c3c;
+    border-bottom: 2px solid #e74c3c;
+    padding-bottom: 2px;
 }
 
 /* ---------------------- Style pour la barre de navigation ------------------ */
 nav {
     display: flex;
-    justify-content: space-between; /* Espacement entre le menu et le bouton hamburger */
+    justify-content: space-between;
     align-items: center;
-    justify-content: center; /* Centre le menu */
+    justify-content: center;
 }
 
 /* ------------------------ Menu hamburger --------------------------------- */
 .menu-toggle {
-    display: none; /* Cacher le checkbox par défaut */
+    display: none;
 }
 
 .menu-icon {
-    display: none; /* Cacher l'icône du menu par défaut */
+    display: none;
     flex-direction: column;
     cursor: pointer;
-    margin-right: 20px; /* Espace à droite */
+    margin-right: 20px;
 }
 
 .menu-icon .bar {
@@ -102,59 +102,79 @@ nav ul li a:active {
 /* ------------------------ Style responsive pour petits écrans ------------------ */
 @media (max-width: 768px) {
     .menu-icon {
-        display: flex; /* Afficher le menu hamburger sur petits écrans */
+        display: flex;
     }
 
     nav ul {
-        flex-direction: column; /* Empiler les éléments verticalement */
-        display: none; /* Cacher le menu par défaut */
-        width: 100%; /* Largeur pleine */
-        background-color: #2c3e50; /* Couleur de fond du menu */
-        position: absolute; /* Positionner le menu en absolu */
-        top: 60px; /* Sous la barre de navigation */
+        flex-direction: column;
+        display: none;
+        width: 100%;
+        background-color: #2c3e50;
+        position: absolute;
+        top: 60px;
         left: 0;
     }
 
     nav ul li {
-        margin: 10px 0; /* Espacement vertical */
+        margin: 10px 0;
     }
 
     /* Afficher le menu lorsque la case est cochée */
     #menu-toggle:checked + .menu-icon + .nav-list {
-        display: flex; /* Afficher le menu */
+        display: flex;
     }
 
     nav ul li a {
-        padding: 15px; /* Augmenter le padding pour un clic plus facile */
-        text-align: center; /* Centrer le texte */
+        padding: 15px;
+        text-align: center;
     }
 }
 
 /* ---------------------- Style du contenu principal ------------------------- */
 main {
     padding: 20px;
-    text-align: center;      
-    margin: 20px auto;       
-    background-color: #fff; /* Fond blanc pour le contenu principal */
-    border-radius: 8px; /* Coins arrondis */
+    text-align: center;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    max-width: 800px; /* Largeur maximale */
-    flex: 1; /* Permet au main de prendre l'espace restant */
+    max-width: 800px;
+    flex: 1;
 }
 
 /* --------------------------- Style pour les images de mèmes --------------- */
 .meme {
-    max-width: 100%; /* Rendre l'image responsive */
-    height: auto; /* Garder les proportions de l'image */
+    max-width: 100%;
+    height: auto;
     margin-top: 20px;
-    border-radius: 5px; /* Coins arrondis pour l'image */
+    border-radius: 5px;
+}
+
+/* --------------------------- Style pour l'images de géranium --------------- */
+
+.image-container {
+    position: absolute;
+    bottom: 20px;
+    right: 50px;
+}
+
+.image {
+    width: 100px;
+    height: 100px;
+}
+
+.legende {
+    position: absolute;
+    bottom: 120px;
+    right: 20px;
+    font-size: 12px;
 }
 
 /* ----------------------------- Style du formulaire ------------------------- */
 form {
-    width: 100%; /* Prendre toute la largeur disponible */
-    max-width: 400px; /* Largeur maximale du formulaire */
-    margin: 20px auto; /* Centrer le formulaire */
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -200,17 +220,17 @@ footer {
     color: white;
     text-align: center;
     padding: 10px 0;
-    position: relative; /* Positionnement normal */
+    position: relative;
     width: 100%;
 }
 
 /* ------------------- Style responsive pour petits écrans ------------------- */
 @media (max-width: 768px) {
     main {
-        margin: 10px; /* Ajuster la marge pour les petits écrans */
+        margin: 10px;
     }
 
     form {
-        max-width: 90%; /* Largeur maximale du formulaire sur petits écrans */
+        max-width: 90%;
     }
 }

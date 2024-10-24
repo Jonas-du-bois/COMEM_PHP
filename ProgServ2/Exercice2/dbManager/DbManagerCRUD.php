@@ -111,28 +111,25 @@ COMMANDE_SQL;
     }
 
     public function compterNbUsers(): int {
-    // La requête SQL pour compter les utilisateurs
-    $countQuery = "SELECT COUNT(*) as total_users FROM users";
+        // La requête SQL pour compter les utilisateurs
+        $countQuery = "SELECT COUNT(*) as total_users FROM users";
 
-    try {
-        // Préparer et exécuter la requête
-        $stmt = $this->db->prepare($countQuery);  
-        $stmt->execute();  // Exécution de la requête
-
-        // Récupérer le résultat de la requête
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);  // Utilisation de fetch pour récupérer une ligne en tant que tableau associatif
-
-        // Vérifier si le résultat existe et retourner le nombre total d'utilisateurs
-        if ($result && isset($result['total_users'])) {
-            return (int) $result['total_users'];  // Conversion en entier
-        } else {
-            return 0;  // Retourner 0 si aucun utilisateur n'est trouvé
+        try {
+            // Préparer et exécuter la requête
+            $stmt = $this->db->prepare($countQuery);
+            $stmt->execute();  // Exécution de la requête
+            // Récupérer le résultat de la requête
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);  // Utilisation de fetch pour récupérer une ligne en tant que tableau associatif
+            // Vérifier si le résultat existe et retourner le nombre total d'utilisateurs
+            if ($result && isset($result['total_users'])) {
+                return (int) $result['total_users'];  // Conversion en entier
+            } else {
+                return 0;  // Retourner 0 si aucun utilisateur n'est trouvé
+            }
+        } catch (\PDOException $e) {
+            // Gestion des erreurs en cas de problème avec la base de données
+            echo "Erreur lors du comptage des utilisateurs : " . $e->getMessage();
+            return 0;  // Retourner 0 en cas d'erreur
         }
-    } catch (\PDOException $e) {
-        // Gestion des erreurs en cas de problème avec la base de données
-        echo "Erreur lors du comptage des utilisateurs : " . $e->getMessage();
-        return 0;  // Retourner 0 en cas d'erreur
     }
-    }
-
 }

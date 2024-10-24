@@ -4,7 +4,7 @@ session_start();
 // Vérification si l'utilisateur est connecté
 if (!isset($_SESSION['user_connected']) || $_SESSION['user_connected'] !== true) {
     // Redirige vers la page d'accueil si l'utilisateur n'est pas connecté
-    header('Location: index.php');
+    header('Location: page2_protected.php');
     exit();
 }
 ?>

@@ -36,7 +36,7 @@
         <main>
             <h1>Bienvenue sur l'inscription</h1>
             <p>Toi aussi tu veux un nouveau compte ? <br> Super, inscris toi dès à présent et gagnes... euh ... bah rien parce qu'il n'y pas assez de budget 
-                <br> Pididi a encore tout mis dans la lub à ses soirées. ATTENTION à la glissade !</p>
+                <br> P Diddy a encore tout mis dans la lub à ses soirées. ATTENTION à la glissade !</p>
 
             <form action="signup.php" method="POST">
                 <div class="form-group">
@@ -128,13 +128,13 @@
                         echo "<p style='color: green;'>Bravo, tu as réussi ton inscription !</p>";
                     } catch (PDOException $e) {
                         // Vérification du code d'erreur pour la contrainte d'unicité
-                        if ($e->getCode() == 23000) {  // 23000 est généralement le code pour les violations de contrainte d'unicité
+                        if ($e->getCode() == 23000) {  // 23000 est le code pour les violations de contrainte d'unicité
                             echo "<p style='color: red;'>Le numéro de téléphone ou l'adresse mail que vous avez fourni est déjà utilisé. Veuillez en essayer un autre.</p>";
                         } else {
                             // Pour d'autres types d'erreurs
                             echo "<p style='color: red;'>Une erreur est survenue lors de l'ajout de l'utilisateur. Veuillez réessayer.</p>";
-                            // Optionnel: Afficher l'erreur brute pour débogage (à enlever en production)
-                            echo "<p style='color: red;'>Erreur: " . $e->getMessage() . "</p>";
+                            // Optionnel: Afficher l'erreur brute 
+                            //echo "<p style='color: red;'>Erreur: " . $e->getMessage() . "</p>";
                         }
                     }
                 }
