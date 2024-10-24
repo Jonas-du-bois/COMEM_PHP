@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styleSheet.css">
     <title>Page 1</title>
-    <link rel="stylesheet" href="stylesSheet.css">
 </head>
 <body>
     <header>
@@ -20,7 +20,7 @@
     
     <main>
         <h1>Bienvenue sur la Page 1</h1>
-        <p>Contenu de la Page 1.</p>
+        <p>Bienvenue sur la page 1 la page ou tu peux faire tout se que tu veux même s'il n'y a rien à faire de bien interréssant</p>
     </main>
     
     <footer>
@@ -35,30 +35,12 @@
 require_once('./config/autoload.php');
 
 use dbManager\DbManagerCRUD;
-use dbManager\Personne;
+use dbManager\Users;
 
-$db = new DbManagerCRUD();
-if ($db->creeTablePersonnes()) {
-    echo "Création de la table 'personnes' réussie, tu gères BG !! <br>";
+$dbUser = new DbManagerCRUD();
+if ($dbUser->creeTable()) {
+    echo "Création de la table 'user' réussie, tu gères BG !! <br>";
 }
-$user1 = new Personne("Philipe", "Catrine", "Philipe.c@gmail.com", "078'933'81'41");
-
-$user2 = new Personne("Philipo", "Catrino", "Philipe.c@gmail.com", "078'933'81'41");
-
-$id = $db->ajoutePersonne($user1);
-if ($id>0) {
-    echo "Philipe Caterine a bien été ajouté à la base de données <br>";
-}else {
-    echo "Strange";
-};
-
-
-$id = $db->ajoutePersonne($user2);
-if ($id>0) {
-    echo "Philipo Caterino a bien été ajouté à la base de données <br>";
-}else {
-    echo "Strange";
-};
 
 
 ?>

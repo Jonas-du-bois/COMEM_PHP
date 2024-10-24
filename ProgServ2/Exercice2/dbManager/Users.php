@@ -18,6 +18,7 @@ class Users {
     private $prenom;
     private $email;
     private $noTel;
+    private $motDePasse;
 
     /**
      * Construit une nouvelle personne avec les paramètres spécifiés
@@ -28,7 +29,7 @@ class Users {
      * @param string $id Identifiant de la personne
      * @throws Exception Lance une expection si un des paramètres n'est pas spécifié
      */
-    public function __construct(string $prenom, string $nom, string $email, string $noTel, int $id = 0) {
+    public function __construct(string $prenom, string $nom, string $email, string $noTel, string $motDePasse,int $id = 0) {
         if (empty($prenom)) {
             throw new Exception('Il faut un prénom');
         }
@@ -50,6 +51,7 @@ class Users {
         $this->email = $email;
         $this->noTel = $noTel;
         $this->id = $id;
+        $this->motDePasse = $motDePasse;
     }
 
     /**
@@ -140,6 +142,14 @@ class Users {
         if (!empty($nouveauNoTel)) {
             $this->noTel = $nouveauNoTel;
         }
+    }
+    
+    /**
+     * Rend le mot de passe
+     * @return string Le mot de passe
+     */
+    public function rendMotDePasse() {
+        return $this->motDePasse; 
     }
 
     /**

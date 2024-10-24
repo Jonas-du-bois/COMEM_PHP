@@ -3,9 +3,9 @@
 namespace dbManager;
 
 interface I_ApiCRUD {
-    public function creeTablePersonnes(): bool;
-    public function ajoutePersonne(Personne $personne): int;
+    public function creeTable(): bool;
+    public function ajoutePersonne(Users $users): int;
     public function rendPersonnes(string $nom): array;
-    public function modifiePersonne(int $id, Personne $personne): bool;
+    public function modifiePersonne(int $id, Users $users): bool;
     public function supprimePersonne(int $id) : bool;
 }

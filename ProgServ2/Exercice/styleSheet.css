@@ -5,6 +5,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center; /* Centrer le contenu verticalement */
     height: 100vh;
     margin: 0;
     padding: 20px;
@@ -14,47 +15,64 @@ body {
 /* Style général du formulaire */
 form {
     background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    padding: 30px; /* Augmente le padding pour plus d'espace */
+    border-radius: 12px; /* Coins plus arrondis */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Ombre plus douce et profonde */
     width: 100%;
     max-width: 400px;
     margin-bottom: 20px;
 }
 
+/* Style des labels */
 label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
     color: #333;
+    font-size: 18px; /* Taille de police augmentée pour les labels */
 }
 
-input[type="number"] {
+/* Style des champs de saisie */
+input[type="number"],
+input[type="password"] {
     width: 100%;
-    padding: 10px;
+    padding: 12px; /* Augmente le padding pour plus de confort */
     margin-bottom: 20px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px; /* Coins arrondis */
     box-sizing: border-box;
     font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Ajout de transition pour l'ombre */
 }
 
+/* Effet au focus pour les champs de saisie */
+input[type="number"]:focus,
+input[type="password"]:focus {
+    border-color: #4CAF50; /* Changement de couleur de bordure au focus */
+    outline: none; /* Supprime l'effet de contour par défaut */
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5); /* Ombre autour du champ */
+}
+
+/* Style du bouton de soumission */
 input[type="submit"] {
     background-color: #4CAF50;
     color: white;
     padding: 12px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px; /* Coins arrondis */
     cursor: pointer;
     width: 100%;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+    font-size: 18px; /* Augmente la taille de police pour plus de visibilité */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Ajoute un effet de transformation */
 }
 
+/* Effet au survol pour le bouton */
 input[type="submit"]:hover {
     background-color: #45a049;
+    transform: translateY(-2px); /* Légère élévation au survol */
 }
 
+/* Style des messages de résultat */
 .result {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -80,12 +98,13 @@ h2 {
     color: #333;
 }
 
+/* Style des boutons supplémentaires */
 button {
     background-color: #f44336;
     color: white;
     padding: 12px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px; /* Coins arrondis */
     cursor: pointer;
     width: 100%;
     font-size: 16px;

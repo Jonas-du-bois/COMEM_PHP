@@ -27,46 +27,49 @@
 
         <div id="result"></div>
 
-        <form action="clearPasswords.php" method="post">
+        <form action="clearPasswords.php" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir vider le fichier de mots de passe ?');">
+            <label for="adminPassword">Mot de passe administrateur :</label>
+            <input type="password" id="adminPassword" name="adminPassword" required>
             <input type="submit" name="clear" value="Vider le fichier de mots de passe">
+        </form>
 
-            <?php
-            require_once 'MotDePasseAleatoire.php';
+        <?php
+        require_once 'MotDePasseAleatoire.php';
 
-            // Options de validation pour les champs de formulaire
-            $options = [
-                'options' => [
-                    'min_range' => 0,
-                    'max_range' => 255,
-                ]
-            ];
+        // Options de validation pour les champs de formulaire
+        $options = [
+            'options' => [
+                'min_range' => 0,
+                'max_range' => 255,
+            ]
+        ];
 
-            // Vérifie si le formulaire a été soumis
-            if (filter_has_var(INPUT_POST, 'submit')) {
-                // Récupère et valide les valeurs des champs de formulaire
-                $nbCarSpeciaux = filter_input(INPUT_POST, 'nbCarSpeciaux', FILTER_VALIDATE_INT, $options);
-                $nbChiffres = filter_input(INPUT_POST, 'nbChiffres', FILTER_VALIDATE_INT, $options);
-                $nbMinuscules = filter_input(INPUT_POST, 'nbMinuscules', FILTER_VALIDATE_INT, $options);
-                $nbMajuscules = filter_input(INPUT_POST, 'nbMajuscules', FILTER_VALIDATE_INT, $options);
+        // Vérifie si le formulaire a été soumis
+        if (filter_has_var(INPUT_POST, 'submit')) {
+            // Récupère et valide les valeurs des champs de formulaire
+            $nbCarSpeciaux = filter_input(INPUT_POST, 'nbCarSpeciaux', FILTER_VALIDATE_INT, $options);
+            $nbChiffres = filter_input(INPUT_POST, 'nbChiffres', FILTER_VALIDATE_INT, $options);
+            $nbMinuscules = filter_input(INPUT_POST, 'nbMinuscules', FILTER_VALIDATE_INT, $options);
+            $nbMajuscules = filter_input(INPUT_POST, 'nbMajuscules', FILTER_VALIDATE_INT, $options);
 
-                // Vérifie si les valeurs sont valides
-                if (!$nbCarSpeciaux || !$nbChiffres || !$nbMinuscules || !$nbMajuscules) {
-                    // Affiche un message d'erreur si les valeurs ne sont pas valides
-                    echo "<script>
+            // Vérifie si les valeurs sont valides
+            if (!$nbCarSpeciaux || !$nbChiffres || !$nbMinuscules || !$nbMajuscules) {
+                // Affiche un message d'erreur si les valeurs ne sont pas valides
+                echo "<script>
                     document.getElementById('result').innerHTML = '<div class=\"result\">Veuillez entrer des valeurs valides pour tous les champs.</div>';
                   </script>";
-                } else {
-                    // Génère le mot de passe si les valeurs sont valides
-                    $motDePasse = MotDePasseAleatoire::genereMotDePasse($nbCarSpeciaux, $nbChiffres, $nbMinuscules, $nbMajuscules);
+            } else {
+                // Génère le mot de passe si les valeurs sont valides
+                $motDePasse = MotDePasseAleatoire::genereMotDePasse($nbCarSpeciaux, $nbChiffres, $nbMinuscules, $nbMajuscules);
 
-                    // Affiche le mot de passe généré
-                    echo "<script>
+                // Affiche le mot de passe généré
+                echo "<script>
                     document.getElementById('result').innerHTML = '<div class=\"result\">Votre mot de passe généré est : <strong>" . $motDePasse . "</strong></div>';
                   </script>";
-                }
             }
-            ?>
+        }
+        ?>
 
-            </body>
+    </body>
 
-            </html>
+</html>

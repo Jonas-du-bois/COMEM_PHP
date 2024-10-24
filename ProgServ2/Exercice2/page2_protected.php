@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page 1</title>
-    <link rel="stylesheet" href="stylesSheet.css">
+    <link rel="stylesheet" href="styleSheet.css">
+    <title>Page 2 - Protected</title>
 </head>
 <body>
     <header>
@@ -19,8 +19,9 @@
     </header>
     
     <main>
-        <h1>Bienvenue sur la Page 1</h1>
-        <p>Contenu de la Page 1.</p>
+        <h1>Bienvenue sur la Page 2, la page qui est protégé ! </h1>
+        <p>Si tu es arrivée jusque là tu as réussi à créer un compte et tu n'as 
+            pas tenté de casser mon code parce que tu es un bon utilisateur </p>
     </main>
     
     <footer>
