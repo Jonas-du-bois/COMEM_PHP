@@ -9,6 +9,10 @@
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
+    background-color: #f4f4f4; /* Couleur de fond douce */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* S'assurer que le body prend toute la hauteur de l'écran */
 }
 
 /* ------------------------ Style pour l'en-tête ---------------------------- */
@@ -21,12 +25,46 @@ header {
     z-index: 1000;
 }
 
+/*-------------------- Style pour les liens dans les messages -------------------*/
+p a {
+    color: #3498db; /* Couleur bleue élégante */
+    text-decoration: none; /* Pas de soulignement par défaut */
+    font-weight: bold; /* Texte en gras */
+    border-bottom: 2px solid transparent; /* Bordure sous le lien, initialement invisible */
+    transition: all 0.3s ease; /* Transition douce pour les changements */
+}
+
+p a:hover {
+    color: #e74c3c; /* Changer de couleur au survol (rouge élégant) */
+    border-bottom: 2px solid #e74c3c; /* Soulignement visible au survol */
+    padding-bottom: 2px; /* Légère distance entre le texte et la bordure */
+}
 
 /* ---------------------- Style pour la barre de navigation ------------------ */
 nav {
     display: flex;
-    justify-content: center;
+    justify-content: space-between; /* Espacement entre le menu et le bouton hamburger */
     align-items: center;
+    justify-content: center; /* Centre le menu */
+}
+
+/* ------------------------ Menu hamburger --------------------------------- */
+.menu-toggle {
+    display: none; /* Cacher le checkbox par défaut */
+}
+
+.menu-icon {
+    display: none; /* Cacher l'icône du menu par défaut */
+    flex-direction: column;
+    cursor: pointer;
+    margin-right: 20px; /* Espace à droite */
+}
+
+.menu-icon .bar {
+    height: 3px;
+    width: 25px;
+    background-color: white;
+    margin: 3px 0;
 }
 
 /* ----------------- Liste non ordonnée dans la barre de navigation ----------- */
@@ -61,16 +99,62 @@ nav ul li a:active {
     color: white;
 }
 
+/* ------------------------ Style responsive pour petits écrans ------------------ */
+@media (max-width: 768px) {
+    .menu-icon {
+        display: flex; /* Afficher le menu hamburger sur petits écrans */
+    }
+
+    nav ul {
+        flex-direction: column; /* Empiler les éléments verticalement */
+        display: none; /* Cacher le menu par défaut */
+        width: 100%; /* Largeur pleine */
+        background-color: #2c3e50; /* Couleur de fond du menu */
+        position: absolute; /* Positionner le menu en absolu */
+        top: 60px; /* Sous la barre de navigation */
+        left: 0;
+    }
+
+    nav ul li {
+        margin: 10px 0; /* Espacement vertical */
+    }
+
+    /* Afficher le menu lorsque la case est cochée */
+    #menu-toggle:checked + .menu-icon + .nav-list {
+        display: flex; /* Afficher le menu */
+    }
+
+    nav ul li a {
+        padding: 15px; /* Augmenter le padding pour un clic plus facile */
+        text-align: center; /* Centrer le texte */
+    }
+}
+
 /* ---------------------- Style du contenu principal ------------------------- */
 main {
     padding: 20px;
-    text-align: center;
+    text-align: center;      
+    margin: 20px auto;       
+    background-color: #fff; /* Fond blanc pour le contenu principal */
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 800px; /* Largeur maximale */
+    flex: 1; /* Permet au main de prendre l'espace restant */
+}
+
+/* --------------------------- Style pour les images de mèmes --------------- */
+.meme {
+    max-width: 100%; /* Rendre l'image responsive */
+    height: auto; /* Garder les proportions de l'image */
+    margin-top: 20px;
+    border-radius: 5px; /* Coins arrondis pour l'image */
 }
 
 /* ----------------------------- Style du formulaire ------------------------- */
 form {
-    width: 300px;
-    margin: 20px auto;
+    width: 100%; /* Prendre toute la largeur disponible */
+    max-width: 400px; /* Largeur maximale du formulaire */
+    margin: 20px auto; /* Centrer le formulaire */
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -110,25 +194,23 @@ form button:hover {
     background-color: #e74c3c;
 }
 
-/* ---------------------------- Pied de page --------------------------------- */
+/* ----------------------------- Pied de page --------------------------------- */
 footer {
     background-color: #2c3e50;
     color: white;
     text-align: center;
     padding: 10px 0;
-    position: fixed;
-    bottom: 0;
+    position: relative; /* Positionnement normal */
     width: 100%;
 }
 
 /* ------------------- Style responsive pour petits écrans ------------------- */
 @media (max-width: 768px) {
-    nav ul {
-        flex-direction: column;
-        align-items: center;
+    main {
+        margin: 10px; /* Ajuster la marge pour les petits écrans */
     }
 
-    nav ul li {
-        margin: 10px 0;
+    form {
+        max-width: 90%; /* Largeur maximale du formulaire sur petits écrans */
     }
 }

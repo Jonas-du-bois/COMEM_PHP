@@ -9,38 +9,46 @@
 <body>
     <header>
         <nav>
-            <ul>
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </label>
+            <ul class="nav-list">
                 <li><a href="index.php">Page 1</a></li>
                 <li><a href="page2_protected.php">Page 2</a></li>
-                <li><a href="login.php">Se connecter</a></li>
-                <li><a href="signup.php">S'inscrire</a></li>
+                
+                <?php
+                session_start();
+                // Vérifiez si l'utilisateur est connecté
+                if (isset($_SESSION['user_connected']) && $_SESSION['user_connected']) {
+                    echo '<li><a href="logout.php">Déconnexion</a></li>';
+                } else {
+                    echo '<li><a href="login.php">Se connecter</a></li>';
+                    echo '<li><a href="signup.php">S\'inscrire</a></li>';
+                }
+                ?>
             </ul>
         </nav>
     </header>
-    
+
     <main>
         <h1>Bienvenue sur la Page 1</h1>
-        <p>Bienvenue sur la page 1 la page ou tu peux faire tout se que tu veux même s'il n'y a rien à faire de bien interréssant</p>
+        <p>Bienvenue sur la page 1 la page où tu peux faire tout ce que tu veux, même s'il n'y a rien à faire de bien intéressant.</p>
+
+        <?php
+        // Affichage d'un message de connexion
+        if (isset($_SESSION['user_connected']) && $_SESSION['user_connected']) {
+            echo "<p>Bravo, tu es connecté.</p>";
+        } else {
+            $_SESSION['user_connected'] = false;
+        }
+        ?>
     </main>
-    
+
     <footer>
         <p>Jonas Du Bois 2024, en galère</p>
     </footer>
 </body>
 </html>
-
-<?php
-
-//phpinfo();
-require_once('./config/autoload.php');
-
-use dbManager\DbManagerCRUD;
-use dbManager\Users;
-
-$dbUser = new DbManagerCRUD();
-if ($dbUser->creeTable()) {
-    echo "Création de la table 'user' réussie, tu gères BG !! <br>";
-}
-
-
-?>
