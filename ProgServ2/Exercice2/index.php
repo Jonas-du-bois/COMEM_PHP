@@ -35,11 +35,13 @@
 
         <main>
             <h1>Bienvenue sur la Page 1</h1>
-            <p>Tu es officiellement arrivé sur la page où... il n'y a absolument rien de spécial à faire. 
+            <p class="styled-text">
+                Tu es officiellement arrivé sur la page où... il n'y a absolument rien de spécial à faire. 
                 Eh oui, tu peux t'installer, te détendre, et admirer ce magnifique espace blanc. Ne t'inquiète 
                 pas, même si ça ressemble à du vide intersidéral, c'est intentionnel. Ici, tu peux faire 
                 absolument tout ce que tu veux... tant que ce "tout" n'implique rien du tout. Bref, bienvenue 
-                dans le calme avant la tempête (ou pas).</p>
+                dans le calme avant la tempête (ou pas).
+            </p>
 
             <?php
             // Affichage d'un message de connexion

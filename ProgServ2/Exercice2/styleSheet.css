@@ -142,6 +142,33 @@ main {
     flex: 1;
 }
 
+/* -------------- Style et animation pour le paragraphe de présentation -------- */
+.styled-text {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    line-height: 1.8;
+    animation: fadeIn 1.5s ease-in-out;
+    padding: 20px;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.styled-text:hover {
+    transform: scale(1.02);
+}
+
+/* Animation pour le texte */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 /* --------------------------- Style pour les images de mèmes --------------- */
 .meme {
     max-width: 100%;
@@ -150,7 +177,7 @@ main {
     border-radius: 5px;
 }
 
-/* --------------------------- Style pour l'images de géranium --------------- */
+/* --------------------------- Style pour l'image du géranium --------------- */
 
 .image-container {
     position: absolute;
@@ -225,7 +252,7 @@ footer {
 }
 
 /* ------------------- Style responsive pour petits écrans ------------------- */
-@media (max-width: 768px) {
+@media (max-width: 500px) {
     main {
         margin: 10px;
     }
