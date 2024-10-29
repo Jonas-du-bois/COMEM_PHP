@@ -20,6 +20,8 @@ class Users {
     private $noTel;
     private $motDePasse;
 
+    private $token;
+
     /**
      * Construit une nouvelle personne avec les paramètres spécifiés
      * @param int $prenom Prénom
@@ -29,7 +31,7 @@ class Users {
      * @param string $id Identifiant de la personne
      * @throws Exception Lance une expection si un des paramètres n'est pas spécifié
      */
-    public function __construct(string $prenom, string $nom, string $email, string $noTel, string $motDePasse,int $id = 0) {
+    public function __construct(string $prenom, string $nom, string $email, string $noTel, string $motDePasse ,int $id = 0) {
         if (empty($prenom)) {
             throw new Exception('Il faut un prénom');
         }
@@ -45,6 +47,9 @@ class Users {
         if ($id < 0) {
             throw new Exception('Il faut un id valide');
         }
+        if (empty($motDePasse)) {
+            throw new Exception('Il faut un mot de passe valide');
+        }
 
         $this->prenom = $prenom;
         $this->nom = $nom;
@@ -52,8 +57,12 @@ class Users {
         $this->noTel = $noTel;
         $this->id = $id;
         $this->motDePasse = $motDePasse;
+        $this->token = bin2hex(random_bytes(16));
     }
 
+    public function rendToken(): string {
+        return $this->token;
+    }
     /**
      * Rend l'id de la personne
      * @return int L'identifiant
