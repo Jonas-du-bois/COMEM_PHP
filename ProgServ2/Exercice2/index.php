@@ -17,7 +17,7 @@
                 </label>
                 <ul class="nav-list">
                     <li><a href="index.php">Accueil</a></li>
-                    <li><a href="page2_protected.php">Page secrète</a></li>
+                    <li><a href="page2_Unprotected.php">Page secrète</a></li>
 
                     <?php
                     session_start();
@@ -34,7 +34,7 @@
         </header>
 
         <main>
-            <h1>Bienvenue sur la Page 1</h1>
+            <h1>Bienvenue sur la Page d'accueil</h1>
             <p class="styled-text">
                 Tu es officiellement arrivé sur la page où... il n'y a absolument rien de spécial à faire. 
                 Eh oui, tu peux t'installer, te détendre, et admirer ce magnifique espace blanc. Ne t'inquiète 

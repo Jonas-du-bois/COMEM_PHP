@@ -17,7 +17,7 @@
                 </label>
                 <ul class="nav-list">
                     <li><a href="index.php">Accueil</a></li>
-                <li><a href="page2_protected.php">Page secrète</a></li>
+                <li><a href="page2_Unprotected.php">Page secrète</a></li>
                 
                 <?php
                 session_start();
@@ -35,13 +35,13 @@
 
         <main>
             <h1>Bienvenue sur la Page 2, la page qui est protégé ! </h1>
-            <p class="styled-text">Voici la page protégée qui n'est pas plus intérressante que ça, à moins que tu ne te connectes ... ;)</p>
+            <p class="styled-text">Voici la page protégée qui n'est pas plus intérressante que ça, à moins que tu ne te connectes ... ;D</p>
 
             <?php
             require_once('./config/autoload.php');
 
 
-// Vérification si l'utilisateur est connecté
+            // Vérification si l'utilisateur est connecté
             if (isset($_SESSION['user_connected']) && $_SESSION['user_connected']) {
                 // L'utilisateur est connecté, redirigez-le vers la page non protégée
                 header('Location: page2_unprotected.php');

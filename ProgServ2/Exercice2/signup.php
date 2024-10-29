@@ -1,3 +1,13 @@
+<?php
+require_once('./config/autoload.php');
+require_once ('./dbManager/DbManagerCRUD.php');
+require_once ('./dbManager/I_ApiCRUD.php');
+require_once ('./dbManager/Users.php');
+
+use dbManager\DbManagerCRUD;
+use dbManager\Users;
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -17,7 +27,7 @@
                 </label>
                 <ul class="nav-list">
                     <li><a href="index.php">Accueil</a></li>
-                    <li><a href="page2_protected.php">Page secrète</a></li>
+                    <li><a href="page2_Unprotected.php">Page secrète</a></li>
 
                     <?php
                     session_start();
@@ -56,7 +66,7 @@
 
                 <div class="form-group">
                     <label for="phone">Numéro de téléphone :</label>
-                    <input type="tel" id="phone" name="phone" required placeholder="Entrez votre numéro de téléphone">
+                    <input type="tel" id="phone" name="phone" required placeholder="076 123 45 67">
                 </div>
 
                 <div class="form-group">
@@ -68,12 +78,8 @@
             </form>
 
             <?php
-            require_once('./config/autoload.php');
-
-            use dbManager\DbManagerCRUD;
-            use dbManager\Users;
-
             $dbUser = new DbManagerCRUD();
+            $dbUser->creeTable();
 
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Récupérer les données du formulaire avec filter_input
@@ -88,6 +94,8 @@
 
                 // Regex pour le numéro de téléphone (format international ou local)
                 $telPattern = "/^\+?[0-9]{10,15}$/"; // accepte numéros locaux et internationaux
+                // Regex pour le mot de passe avec les caractères spéciaux 
+                $passwordPattern = "/^(?=.*[A-Z])(?=.*[\W_])(?=.{6,})/";
 
                 $errors = []; // Tableau pour stocker les messages d'erreur
                 // Validation du prénom
@@ -111,8 +119,8 @@
                 }
 
                 // Validation du mot de passe
-                if (strlen($motDePasse) < 6) {
-                    $errors[] = "Le mot de passe doit comporter au moins 6 caractères.";
+                if (!preg_match($passwordPattern, $motDePasse)) {
+                    $errors[] = "Le mot de passe doit comporter au moins 6 caractères, dont une majuscule et un caractère spécial.";
                 }
 
                 // Afficher les erreurs

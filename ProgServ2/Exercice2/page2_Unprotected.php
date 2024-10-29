@@ -29,7 +29,7 @@ if (!isset($_SESSION['user_connected']) || $_SESSION['user_connected'] !== true)
                 </label>
                 <ul class="nav-list">
                     <li><a href="index.php">Accueil</a></li>
-                <li><a href="page2_protected.php">Page secrète</a></li>
+                <li><a href="page2_Unprotected.php">Page secrète</a></li>
                 
                 <?php
                 if (isset($_SESSION['user_connected']) && $_SESSION['user_connected']) {

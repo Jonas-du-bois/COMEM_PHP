@@ -1,5 +1,7 @@
 <?php
 require_once('./config/autoload.php');
+require_once ('./dbManager/DbManagerCRUD.php');
+require_once ('./dbManager/I_ApiCRUD.php');
 
 use dbManager\DbManagerCRUD;
 
@@ -25,7 +27,7 @@ $dbUser = new DbManagerCRUD();
                 </label>
                 <ul class="nav-list">
                     <li><a href="index.php">Accueil</a></li>
-                    <li><a href="page2_protected.php">Page secrète</a></li>
+                    <li><a href="page2_Unprotected.php">Page secrète</a></li>
 
                     <?php
                     session_start();

@@ -1,7 +1,7 @@
 <?php
 namespace dbManager;
 
-require_once('./config/autoload.php');
+require_once ('./dbManager/I_ApiCRUD.php');
 
 use dbManager\I_ApiCRUD;
 

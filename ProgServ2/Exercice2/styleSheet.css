@@ -100,7 +100,7 @@ nav ul li a:active {
 }
 
 /* ------------------------ Style responsive pour petits écrans ------------------ */
-@media (max-width: 768px) {
+@media (max-width: 625px) {
     .menu-icon {
         display: flex;
     }
@@ -147,16 +147,16 @@ main {
     font-size: 1.2rem;
     color: #2c3e50;
     line-height: 1.8;
-    animation: fadeIn 1.5s ease-in-out;
+    animation: fadeIn 0.5s ease-in-out;
     padding: 20px;
-    background-color: #e0e0e0;
+    background-color: white;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+    transition: transform 0.2s ease;
 }
 
 .styled-text:hover {
-    transform: scale(1.02);
+    transform: scale(1.007);
 }
 
 /* Animation pour le texte */
