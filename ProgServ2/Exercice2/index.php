@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="styleSheet.css">
-        <title>Page 1</title>
+        <title>Accueil</title>
     </head>
     <body>
         <header>
@@ -16,8 +16,8 @@
                     <span class="bar"></span>
                 </label>
                 <ul class="nav-list">
-                    <li><a href="index.php">Page 1</a></li>
-                    <li><a href="page2_protected.php">Page 2</a></li>
+                    <li><a href="index.php">Accueil</a></li>
+                    <li><a href="page2_protected.php">Page secrète</a></li>
 
                     <?php
                     session_start();
@@ -44,7 +44,7 @@
             </p>
 
             <?php
-            // Affichage d'un message de connexion
+            // Affichage du message de connexion
             if (isset($_SESSION['user_connected']) && $_SESSION['user_connected']) {
                 echo "<br>";
                 echo "<p><strong>Bravo, tu es connecté.</strong></p>";

@@ -16,8 +16,8 @@
                     <span class="bar"></span>
                 </label>
                 <ul class="nav-list">
-                    <li><a href="index.php">Page 1</a></li>
-                    <li><a href="page2_protected.php">Page 2</a></li>
+                    <li><a href="index.php">Accueil</a></li>
+                    <li><a href="page2_protected.php">Page secrète</a></li>
 
                     <?php
                     session_start();

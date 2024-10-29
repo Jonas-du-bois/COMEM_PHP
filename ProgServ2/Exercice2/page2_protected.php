@@ -16,8 +16,8 @@
                     <span class="bar"></span>
                 </label>
                 <ul class="nav-list">
-                    <li><a href="index.php">Page 1</a></li>
-                <li><a href="page2_protected.php">Page 2</a></li>
+                    <li><a href="index.php">Accueil</a></li>
+                <li><a href="page2_protected.php">Page secrète</a></li>
                 
                 <?php
                 session_start();
@@ -35,7 +35,7 @@
 
         <main>
             <h1>Bienvenue sur la Page 2, la page qui est protégé ! </h1>
-            <p>Impossible que tu affiches se qui se passe ici tu n'est pas connecté</p>
+            <p class="styled-text">Voici la page protégée qui n'est pas plus intérressante que ça, à moins que tu ne te connectes ... ;)</p>
 
             <?php
             require_once('./config/autoload.php');
@@ -49,8 +49,7 @@
             } else {
                 // L'utilisateur n'est pas connecté
                 $_SESSION['user_connected'] = false; // Initialisation de la variable de session
-                echo "<p>Salut ! Il semblerait que tu n'es pas connecté.</p>";
-                echo "<p>Accède ici à la page de <a href='login.php'>connexion</a>.</p>";
+                echo "<p>Il semblerait que tu n'es pas connecté. Accède ici à la page de <a href='login.php'>connexion</a>.</p>";
             }
             ?>
 
