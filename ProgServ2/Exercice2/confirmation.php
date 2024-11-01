@@ -1,6 +1,8 @@
 <?php
 // Connexion à la base de données et chargement des classes nécessaires
 require_once('./dbManager/DbManagerCRUD.php');
+require_once('./dbManager/Users.php');
+require_once('./dbManager/I_ApiCRUD.php');
 
 use dbManager\DbManagerCRUD;
 use dbManager\Users;

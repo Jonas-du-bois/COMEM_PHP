@@ -1,5 +1,6 @@
 {
     "require": {
-        "symfony/mailer": "^7.1"
+        "symfony/mailer": "^7.1",
+        "google/cloud-translate": "^1.19"
     }
 }
