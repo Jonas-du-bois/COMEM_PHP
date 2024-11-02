@@ -7,7 +7,8 @@ session_start();
 
 // Créez une instance du client Google Translate avec votre clé API
 $translate = new TranslateClient([
-    'key' => 'AIzaSyCcpO57ip9wQSnujQoHKPBFxn9Xraubi2k'
+    //'key' => 
+    'verify' => false // Désactiver la vérification SSL (uniquement pour le développement)
 ]);
 
 // Définissez la langue cible par défaut (si aucune langue n'est définie dans la session)
