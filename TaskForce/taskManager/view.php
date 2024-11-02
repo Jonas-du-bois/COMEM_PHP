@@ -1,0 +1,1 @@
+# Vue détaillée d'une tâche
