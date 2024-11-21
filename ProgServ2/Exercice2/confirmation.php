@@ -22,7 +22,7 @@ $dbUser = new DbManagerCRUD();
 <div class="confirmation-container">
     <?php
     // Récupération du token depuis l'URL et validation
-    $token = filter_input(INPUT_GET, 'token');
+    $token = filter_input(INPUT_GET, 'token', FILTER_DEFAULT);
 
     if ($token) {
         // Vérifier l'utilisateur correspondant au token
