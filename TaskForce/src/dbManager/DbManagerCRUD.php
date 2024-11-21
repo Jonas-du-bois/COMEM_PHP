@@ -21,6 +21,8 @@ class DbManagerCRUD implements I_ApiCRUD
         }
     }
 
+    //commentaire test
+
     public function creeTable(): bool
     {
         $sqlUsers = <<<SQL
