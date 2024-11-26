@@ -34,12 +34,10 @@ session_start();
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="index.php">Accueil</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="dashboard.php">Dashboard</a>
-                </li>
                 <?php
                 // Vérifie si l'utilisateur est connecté
                 if (isset($_SESSION['user_connected']) && $_SESSION['user_connected']) {
+                    echo '<li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>';
                     echo '<li class="nav-item"><a class="nav-link" href="logout.php">Déconnexion</a></li>';
                 } else {
                     echo '<li class="nav-item"><a class="nav-link" href="login.php">Se connecter</a></li>';

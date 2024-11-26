@@ -67,7 +67,7 @@ class Users {
      * @return int L'identifiant
      */
     public function rendId(): int {
-        return $this->id;
+        return (int)$this->id;
     }
 
     /**

@@ -27,7 +27,7 @@ interface I_ApiCRUD {
      * @param Users $users Instance contenant les nouvelles données.
      * @return bool Retourne true si la modification a réussi, sinon false.
      */
-    public function modifiePersonne(int $id, Users $users): bool;
+    public function modifiePersonne(int $id, Users $user): bool;
 
     /**
      * Supprime un utilisateur.
@@ -71,33 +71,45 @@ interface I_ApiCRUD {
      * @param Task $tasks Instance de la classe Task à insérer.
      * @return int Identifiant de la tâche insérée.
      */
-    public function ajouteTache(Task $tasks): int;
+    public function createTask(Task $task): int;
 
     /**
-     * Retourne toutes les tâches.
-     * @return array Tableau des tâches.
+     * Associe des utilisateurs à une tâche dans la table de jointure.
+     * @param int $taskId ID de la tâche
+     * @param array $userIds Liste des IDs des utilisateurs
+     * @throws \Exception
      */
-    public function rendTaches(): array;
+    public function assignUsersToTask(int $taskId, array $userIds): void;
 
     /**
-     * Modifie une tâche existante.
-     * @param int $id Identifiant de la tâche.
-     * @param Task $tasks Instance contenant les nouvelles données.
-     * @return bool Retourne true si la modification a réussi, sinon false.
+     * Récupère une tâche en fonction de son ID.
+     * @param int $taskId ID de la tâche
+     * @return Task Objet Task récupéré
+     * @throws \Exception Si la tâche n'existe pas
      */
-    public function modifieTache(int $id, Task $tasks): bool;
+    public function getTaskById(int $taskId): Task;
 
     /**
-     * Supprime une tâche.
-     * @param int $id Identifiant de la tâche.
-     * @return bool Retourne true si la suppression a réussi, sinon false.
+     * Met à jour une tâche existante.
+     * @param Task $task Objet Task avec les nouvelles données
+     * @throws \Exception Si la mise à jour échoue
      */
-    public function supprimeTache(int $id): bool;
+    public function updateTask(Task $task): void;
 
     /**
-     * Récupère les tâches assignées à un utilisateur spécifique.
-     * @param int $userId Identifiant de l'utilisateur.
-     * @return array Tableau des tâches assignées à cet utilisateur.
+     * Supprime une tâche de la base de données.
+     * @param int $taskId ID de la tâche à supprimer
+     * @throws \Exception Si la suppression échoue
      */
-    public function getTasksByUserId(int $userId): array;
+    public function deleteTask(int $taskId): void;
+
+    /**
+     * Récupère toutes les tâches.
+     * @return Task[] Tableau d'objets Task
+     * @throws \Exception
+     */
+    public function getAllTasks(): array;
+
+    public function getTasksByUserIdAndStatus($userId, $status);
+
 }

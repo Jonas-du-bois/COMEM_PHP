@@ -67,6 +67,7 @@ $dbUser = new DbManagerCRUD();
                             if ($loginStatus === 'success') {
                                 echo "<div class='alert alert-success'>Connexion réussie ! Bienvenue dans le paradis du fun !</div>";
                                 $_SESSION['user_connected'] = true;
+                                $_SESSION['email_user'] = $email;
 
                                 header('Location: index.php');
                                 exit();
