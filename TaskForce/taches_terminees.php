@@ -44,26 +44,32 @@ $tacheTermine = $dbManager->getTasksByUserIdAndStatus($userId, 'termine');
             <?php if (empty($tacheTermine)): ?>
                 <p>Aucune tâche terminée pour le moment.</p>
             <?php else: ?>
-                <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Titre</th>
-                                <th>Description</th>
-                                <th>Date d'échéance</th>
-                                <th>Statut</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($tacheTermine as $task): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($task->rendTitre()); ?></td>
-                                    <td><?php echo htmlspecialchars($task->rendDescription()); ?></td>
-                                    <td><?php echo htmlspecialchars($task->rendDateEcheance()); ?></td>
-                                    <td><?php echo htmlspecialchars($task->rendStatut()); ?></td>
+                <div class="table-responsive p-3">
+                    <table class="table table-hover">
+                            <thead>
+                                <tr class="table-dark">
+                                    <th scope="col">Titre</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Date d'échéance</th>
+                                    <th scope="col">Statut</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($tacheTermine as $task): ?>
+                                    <tr>
+                                        <td scope="row"><?php echo htmlspecialchars($task->rendTitre()); ?></td>
+                                        <td class="text-truncate" style="max-width: 200px; overflow: hidden; white-space: nowrap;"><?php echo htmlspecialchars($task->rendDescription()); ?></td>
+                                        <td><?php echo htmlspecialchars($task->getFormattedDateEcheance()); ?></td>
+                                        <td>
+                                            <span class="badge <?php echo getStatusBadgeClass($task->getFormattedStatut()); ?> me-1">
+                                                <?php echo htmlspecialchars($task->getFormattedStatut()); ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                </div>
             <?php endif; ?>
             
         </div>

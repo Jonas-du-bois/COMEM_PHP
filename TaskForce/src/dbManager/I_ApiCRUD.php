@@ -94,7 +94,7 @@ interface I_ApiCRUD {
      * @param Task $task Objet Task avec les nouvelles données
      * @throws \Exception Si la mise à jour échoue
      */
-    public function updateTask(Task $task): void;
+    public function updateTask(Task $task, int $taskId);
 
     /**
      * Supprime une tâche de la base de données.

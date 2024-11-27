@@ -5,17 +5,15 @@ function getUserByEmail($email, $dbManager) {
     return !empty($userInfoArray) ? $userInfoArray[0] : null;
 }
 
-function getTaskStatusClass($statut) {
-    switch ($statut) {
-        case 'a faire':
-            return 'task-todo';
-        case 'en cours':
-            return 'task-in-progress';
-        case 'termine':
-            return 'task-completed';
-        default:
-            return ''; 
-    }
+function getStatusBadgeClass(string $statut): string
+{
+    $badgeClasses = [
+        'À faire' => 'bg-danger',   
+        'En cours' => 'bg-warning',     
+        'Terminé' => 'bg-success',   
+    ];
+
+    return $badgeClasses[$statut] ?? 'bg-secondary';  // Par défaut, gris
 }
 
 

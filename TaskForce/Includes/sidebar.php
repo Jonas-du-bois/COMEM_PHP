@@ -32,6 +32,11 @@ if (!isset($_SESSION['user_connected']) && !$_SESSION['user_connected']) {
             </a>
         </li>
         <li>
+            <a href="taches_partage.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'taches_partage.php' ? 'active' : '' ?>">
+                Tâches partagées
+            </a>
+        </li>
+        <li>
             <a href="profile.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'profile.php' ? 'active' : '' ?>">
                 Mon Profil
             </a>

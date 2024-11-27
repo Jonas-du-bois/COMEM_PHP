@@ -8,35 +8,26 @@ use DateTime;
 class Task
 {
     private $id;
-    private $titre;          // Correspond à la colonne 'titre' dans la base
-    private $description;    // Correspond à la colonne 'description' dans la base
-    private $userIds = [];   // Liste des IDs des utilisateurs assignés à la tâche
-    private $dateEcheance;   // Correspond à la colonne 'dateEcheance' dans la base
-    private $statut;         // Correspond à la colonne 'statut' dans la base
+    private $titre;
+    private $description;
+    private $userIds = [];
+    private $dateEcheance;
+    private $statut;
     private $createdAt;
 
-    /**
-     * Construit une nouvelle tâche avec les paramètres spécifiés
-     * @param string        $titre Titre de la tâche
-     * @param string|null   $description Description de la tâche
-     * @param array|null    $userIds Liste des IDs des utilisateurs assignés
-     * @param string|null   $dateEcheance Date limite au format 'YYYY-MM-DD'
-     * @param string        $statut Statut de la tâche (à_faire, en_cours, terminé)
-     * @param int           $id Identifiant unique de la tâche (par défaut 0)
-     * @throws Exception    Lance une exception si un paramètre obligatoire est incorrect
-     */
     public function __construct(
         string $titre,
         string $description = null,
         array $userIds = null,
         string $dateEcheance = null,
-        string $statut = 'à_faire',
+        string $statut = 'a_faire',
+        int $id = 0,
     ) {
         if (empty($titre)) {
             throw new Exception('Il faut un titre pour la tâche.');
         }
         if (!in_array($statut, ['a_faire', 'en_cours', 'termine'])) {
-            throw new Exception('Le statut est invalide. Valeurs acceptées : à_faire, en_cours, terminé.');
+            throw new Exception('Le statut est invalide. Valeurs acceptées : a_faire, en_cours, termine.');
         }
 
         if (!empty($dateEcheance) && !$this->isValidDate($dateEcheance)) {
@@ -49,21 +40,16 @@ class Task
         $this->dateEcheance = $dateEcheance;
         $this->statut = $statut;
         $this->createdAt = (new DateTime())->format('Y-m-d H:i:s');
+        $this->id = $id;
     }
 
-    /**
-     * Vérifie si une date est valide au format YYYY-MM-DD
-     * @param string $date Date à vérifier
-     * @return bool
-     */
     private function isValidDate(string $date): bool
     {
         $d = DateTime::createFromFormat('Y-m-d', $date);
         return $d && $d->format('Y-m-d') === $date;
     }
 
-    // Getters et Setters pour accéder aux propriétés
-
+    // Getters
     public function rendId(): int
     {
         return $this->id;
@@ -74,22 +60,9 @@ class Task
         return $this->titre;
     }
 
-    public function modifieTitre(string $titre): void
-    {
-        if (empty($titre)) {
-            throw new Exception('Le titre ne peut pas être vide.');
-        }
-        $this->titre = $titre;
-    }
-
     public function rendDescription(): ?string
     {
         return $this->description;
-    }
-
-    public function modifieDescription(?string $description): void
-    {
-        $this->description = $description;
     }
 
     public function rendUserIds(): array
@@ -97,22 +70,9 @@ class Task
         return $this->userIds;
     }
 
-    public function modifieUserIds(array $userIds): void
-    {
-        $this->userIds = $userIds;
-    }
-
     public function rendDateEcheance(): ?string
     {
         return $this->dateEcheance;
-    }
-
-    public function modifieDateEcheance(?string $dateEcheance): void
-    {
-        if (!empty($dateEcheance) && !$this->isValidDate($dateEcheance)) {
-            throw new Exception('La date limite est invalide. Utilisez le format YYYY-MM-DD.');
-        }
-        $this->dateEcheance = $dateEcheance;
     }
 
     public function rendStatut(): string
@@ -120,16 +80,63 @@ class Task
         return $this->statut;
     }
 
-    public function modifieStatut(string $statut): void
+    public function rendCreatedAt(): string
     {
-        if (!in_array($statut, ['à_faire', 'en_cours', 'terminé'])) {
-            throw new Exception('Le statut est invalide. Valeurs acceptées : à_faire, en_cours, terminé.');
+        return $this->createdAt;
+    }
+
+    // Méthodes pour formater les données
+    public function getFormattedDateEcheance(): ?string
+    {
+        if ($this->dateEcheance) {
+            $d = DateTime::createFromFormat('Y-m-d', $this->dateEcheance);
+            return $d ? $d->format('d.m.Y') : null;
+        }
+        return null;
+    }
+
+    public function getFormattedStatut(): string
+    {
+        $statutTraduction = [
+            'a_faire' => 'À faire',
+            'en_cours' => 'En cours',
+            'termine' => 'Terminé',
+        ];
+        return $statutTraduction[$this->statut] ?? 'Inconnu';
+    }
+
+    // Setters
+        public function setTitre(string $titre): void
+    {
+        if (empty($titre)) {
+            throw new Exception('Il faut un titre pour la tâche.');
+        }
+        $this->titre = $titre;
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function setDateEcheance(?string $dateEcheance): void
+    {
+        if (!empty($dateEcheance) && !$this->isValidDate($dateEcheance)) {
+            throw new Exception('La date limite est invalide. Utilisez le format YYYY-MM-DD.');
+        }
+        $this->dateEcheance = $dateEcheance;
+    }
+
+    public function setStatut(string $statut): void
+    {
+        if (!in_array($statut, ['a_faire', 'en_cours', 'termine'])) {
+            throw new Exception('Le statut est invalide. Valeurs acceptées : a_faire, en_cours, termine.');
         }
         $this->statut = $statut;
     }
 
-    public function rendCreatedAt(): string
+    public function setId(int $id)
     {
-        return $this->createdAt;
+        $this->id = $id;
     }
 }

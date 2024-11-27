@@ -54,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Ajout de la tâche à la base de données
             $taskId = $dbManager->createTask($task);
+            $task->setId($taskId);
             $successMessage = "Tâche ajoutée avec succès !";
         } catch (\Exception $e) {
             $errorMessage = "Erreur : " . $e->getMessage();
