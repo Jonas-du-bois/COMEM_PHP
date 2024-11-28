@@ -41,6 +41,7 @@ $taches = $dbManager->getTasksByUserId($userId);
                 
                 <!-- Liste des tâches -->
                 <h4>Mes Tâches</h4>
+                <h6>Pour modifier une tâche il suffit de cliquer dessus.</h6>
                 
                 <?php if (empty($taches)): ?>
                     <p>Aucune tâche assignée pour le moment.</p>

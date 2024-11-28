@@ -47,20 +47,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $status = $_POST['status'];
     $assignedUsers = $_POST['assigned_users'] ?? [];
 
-    // Mettre à jour les informations de la tâche
-    $task->setTitre($title);
-    $task->setDescription($description);
-    $task->setDateEcheance($deadline);
-    $task->setStatut($status);
+    try {
+        // Mettre à jour les informations de la tâche
+        $task->setTitre($title);
+        $task->setDescription($description);
+        $task->setDateEcheance($deadline);
+        $task->setStatut($status);
 
-    // Mise à jour de la tâche dans la base de données
-    $dbManager->updateTask($task, $taskId);
+        // Mise à jour de la tâche dans la base de données
+        $dbManager->updateTask($task, $taskId);
 
+        // Ajouter le message de succès dans la session
+        $_SESSION['successMessage'] = "Tâche modifiée avec succès!";
+    } catch (\Exception $e) {
+        // Ajouter le message d'erreur dans la session
+        $_SESSION['errorMessage'] = "Erreur lors de la modification de la tâche : " . $e->getMessage();
+    }
 
     // Rediriger vers la page de détail de la tâche après la mise à jour
     header("Location: task_details.php?task_id=" . $taskId);
     exit;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -81,6 +89,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <h2 class="text-center mb-4">Détail de la tâche : <?php echo htmlspecialchars($task->rendTitre()); ?></h2>
 
+            <!-- Affichage des messages de succès ou d'erreur -->
+            <?php
+            // Afficher les messages de succès ou d'erreur, s'ils existent
+            if (isset($_SESSION['successMessage'])) {
+                echo '<div class="alert alert-success">' . htmlspecialchars($_SESSION['successMessage']) . '</div>';
+                unset($_SESSION['successMessage']); // Supprimer le message après affichage
+                header('refresh:2');
+            }
+
+            if (isset($_SESSION['errorMessage'])) {
+                echo '<div class="alert alert-danger">' . htmlspecialchars($_SESSION['errorMessage']) . '</div>';
+                unset($_SESSION['errorMessage']); // Supprimer le message après affichage
+                header('refresh:2');
+            }
+            ?>
             <!-- Formulaire pour modifier la tâche -->
             <form action="task_details.php?task_id=<?php echo $taskId; ?>" method="POST">
                 <div class="mb-3">
@@ -121,9 +144,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <button type="submit" class="btn btn-primary">Mettre à jour</button>
             </form>
+            <!-- Formulaire pour supprimer la tâche -->
+            <form method="POST" action="delete_task.php?task_id=<?php echo $taskId; ?>">
+                <div class="mb-3 text-end">
+                <button type="submit" name="delete_task" class="btn btn-danger">Supprimer la tâche</button>
+                </div>
+            </form>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

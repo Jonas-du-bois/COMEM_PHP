@@ -405,9 +405,6 @@ class DbManagerCRUD implements I_ApiCRUD
             throw new \Exception("Erreur lors de la mise à jour de la tâche : " . $e->getMessage());
         }
     }
-    
-
-
 
     /**
      * Supprime une tâche de la base de données.
