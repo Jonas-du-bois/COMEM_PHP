@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Inclusion de la sidebar -->
         <?php include 'includes/sidebar.php'; ?>
 
-        <div class="container mt-5">
+        <div class="main-content ms-auto col-md-9 col-lg-10 p-5 pt-4">
 
             <h2 class="text-center mb-4">Détail de la tâche : <?php echo htmlspecialchars($task->rendTitre()); ?></h2>
 

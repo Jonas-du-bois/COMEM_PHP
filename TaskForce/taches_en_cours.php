@@ -36,8 +36,8 @@ $tachesEnCours = $dbManager->getTasksByUserIdAndStatus($userId, 'en_cours');
     <div class="d-flex">
         <!-- Inclusion de la sidebar -->
         <?php include 'includes/sidebar.php'; ?>
-
-        <div class="container mt-5">
+        
+        <div class="main-content ms-auto col-md-9 col-lg-10 p-5">
 
         <h2 class="text-center mb-4">Tâches en cours</h2>
 

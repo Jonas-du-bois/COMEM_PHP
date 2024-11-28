@@ -69,7 +69,7 @@ $tachepartager = array_map('formatTaskData', $tachepartager);
         <!-- Inclusion de la sidebar -->
         <?php include 'includes/sidebar.php'; ?>
 
-        <div class="container mt-5">
+        <div class="main-content ms-auto col-md-9 col-lg-10 p-5">
 
             <h2 class="text-center mb-4">Tâches partagées</h2>
 

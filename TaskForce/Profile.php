@@ -46,7 +46,7 @@ $dbManager = new DbManagerCRUD();
 
         ?>
 
-        <div class="d-flex flex-column flex-md-row vh-100">
+<div class="main-content ms-auto col-md-9 col-lg-10 p-4">
             <main class="container py-5">
                 <div class="p-4">
                     <h1 class="text-center mb-4">Mon Profil</h1>

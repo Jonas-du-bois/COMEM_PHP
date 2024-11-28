@@ -77,8 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Inclusion de la sidebar -->
         <?php include 'includes/sidebar.php'; ?>
 
-        <main class="container py-5">
-            <div class="p-4">
+        <main class="container py-4">
+        <div class="main-content ms-auto col-md-9 col-lg-10 pt-4">
                 <h2 class="text-center mb-4">Ajouter une nouvelle tâche</h2>
 
                 <!-- Affichage des messages de succès ou d'erreur -->

@@ -8,7 +8,6 @@ if (session_status() == PHP_SESSION_NONE) {
 if (!isset($_SESSION['user_connected']) && !$_SESSION['user_connected']) {
     header("Location: login.php");
     exit;
-    
 }
 //Prendre le nom et le prénom de l'utilisateur connecté
 $email = $_SESSION['email_user'];
@@ -24,49 +23,36 @@ if (!empty($users)) {
 }
 ?>
 
-<div class="col-md-3 col-lg-2 bg-dark text-white p-3" style="height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
-    <!-- Titre et Nom de l'utilisateur -->
-    <div>
-        <h4 class="text-center mb-1">Gestion des Tâches</h4>
-        <p class="text-center "><?= htmlspecialchars($userName) ?></p>
-    </div>
+<div class="col-md-3 col-lg-2 bg-dark text-white sidebar position-fixed vh-100 d-flex flex-column p-3">
 
-    <!-- Navigation principale -->
-    <ul class="nav nav-pills flex-column mb-auto mt-4">
-        <li class="nav-item">
-            <a href="dashboard.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : '' ?>">
-                Tableau de bord
-            </a>
-        </li>
-        <li>
-            <a href="ajouter_tache.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'ajouter_tache.php' ? 'active' : '' ?>">
-                Ajouter une tâche
-            </a>
-        </li>
-        <li>
-            <a href="taches_en_cours.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'taches_en_cours.php' ? 'active' : '' ?>">
-                Tâches en cours
-            </a>
-        </li>
-        <li>
-            <a href="taches_terminees.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'taches_terminees.php' ? 'active' : '' ?>">
-                Tâches terminées
-            </a>
-        </li>
-        <li>
-            <a href="taches_partage.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'taches_partage.php' ? 'active' : '' ?>">
-                Tâches partagées
-            </a>
-        </li>
-    </ul>
+    <h4 class="mb-0">Gestion des tâches</h4>
+    <p class="mt-1"><?= htmlspecialchars($userName) ?></p>
 
-    <!-- Mon Profil et Se déconnecter -->
-    <div class="mt-3 pt-3 border-top">
-        <a href="profile.php" class="nav-link text-white <?= basename($_SERVER['PHP_SELF']) == 'profile.php' ? 'active' : '' ?>" style="margin-bottom: 10px;">
-            Mon Profil
-        </a>
-        <a href="logout.php" class="nav-link text-white">
-            Se déconnecter
-        </a>
-    </div>
+
+    <ul class="nav nav-pills flex-column mb-auto pt-3">
+    <?php
+                    $navLinks = [
+                        'dashboard.php' => 'Tableau de bord',
+                        'ajouter_tache.php' => 'Ajouter une tâche',
+                        'taches_en_cours.php' => 'Tâches en cours',
+                        'taches_terminees.php' => 'Tâches terminées',
+                        'taches_partage.php' => 'Tâches partagées',
+                    ];
+                    foreach ($navLinks as $link => $label) {
+                        $active = basename($_SERVER['PHP_SELF']) == $link ? 'active' : '';
+                        echo "<li class='nav-item'>
+                                <a href='$link' class='nav-link text-white $active'>$label</a>
+                              </li>";
+                    }
+                    ?>
+                </ul>
+                
+                <div class="mt-auto border-top pt-3">
+                    <a href="profile.php" class="nav-link text-white pb-3<?= basename($_SERVER['PHP_SELF']) == 'profile.php' ? 'active' : '' ?>">
+                        Mon Profil
+                    </a>
+                    <a href="logout.php" class="nav-link text-white pb-3">
+                        Se déconnecter
+                    </a>
+                </div>
 </div>
