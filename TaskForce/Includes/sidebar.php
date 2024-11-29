@@ -34,9 +34,11 @@ if (!empty($users)) {
                     $navLinks = [
                         'dashboard.php' => 'Tableau de bord',
                         'ajouter_tache.php' => 'Ajouter une tâche',
+                        'taches_a_faire.php' => 'Tâches à faire',
                         'taches_en_cours.php' => 'Tâches en cours',
                         'taches_terminees.php' => 'Tâches terminées',
                         'taches_partage.php' => 'Tâches partagées',
+                        
                     ];
                     foreach ($navLinks as $link => $label) {
                         $active = basename($_SERVER['PHP_SELF']) == $link ? 'active' : '';

@@ -78,12 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['task_id'], $_POST['st
             <?php include 'Includes/sidebar.php'; ?>
             <!-- Contenu principal -->
             <div class="main-content ms-auto col-md-9 col-lg-10 p-5">
-                <h2 class="text-center mb-4 text-primary">Tableau de bord</h2>
+                <h2 class="text-center mb-4">Tableau de bord</h2>
 
 
                 <!-- Liste des tâches -->
                 <h4 class="text-secondary">Mes Tâches</h4>
-                
+
 
                 <?php if (empty($taches)): ?>
                     <div class="alert alert-info mt-4" role="alert">
@@ -91,29 +91,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['task_id'], $_POST['st
                     </div>
                 <?php else: ?>
                     <div class="table-responsive pt-4">
-                        <table class="table align-middle">
-                            <thead class="table-primary">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-secondary ">
                                 <tr>
                                     <th scope="col">Titre</th>
                                     <th scope="col">Description</th>
                                     <th scope="col">Date d'échéance</th>
-                                    <th scope="col">Statut</th>
+                                    <th scope="col" style="width: 15%;">Statut</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($taches as $task): ?>
                                     <tr>
-                                        <td scope="row" class="fw-bold text-dark"><?php echo htmlspecialchars($task->rendTitre()); ?></td>
+                                        <td scope="row" class="fw-bold text-dark p-3"><?php echo htmlspecialchars($task->rendTitre()); ?></td>
                                         <td class="text-truncate" style="max-width: 300px;">
                                             <?php echo htmlspecialchars($task->rendDescription()); ?>
                                         </td>
                                         <td class="text-muted"><?php echo htmlspecialchars($task->getFormattedDateEcheance()); ?></td>
                                         <td>
-                                            <!-- Formulaire pour changer le statut -->
                                             <form method="POST" action="">
                                                 <input type="hidden" name="task_id" value="<?php echo htmlspecialchars($task->rendId()); ?>">
-                                                <select name="statut" class="statutActu form-select text-white bg-primary" onchange="this.form.submit()">
+                                              
+                                                <select name="statut" class="statutActu form-select text-white badge <?php echo getStatusBadgeClass($task->getFormattedStatut()); ?>" style="max-width: 150px;" onchange="this.form.submit()">
                                                     <?php foreach (['À faire', 'En cours', 'Terminé'] as $status): ?>
                                                         <option value="<?php echo htmlspecialchars($status); ?>"
                                                             <?php echo $status === $task->getFormattedStatut() ? 'selected' : ''; ?>>
@@ -159,7 +159,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['task_id'], $_POST['st
 </body>
 
 </html>
+<style>
 
+                                                
+select option {
+    background-color: white;
+    color: #000;
+}
+select option:hover {
+    background-color: #ffc107;
+}
+</style>
 <!-- 
     <script>
         const span = document.querySelector("badge");
