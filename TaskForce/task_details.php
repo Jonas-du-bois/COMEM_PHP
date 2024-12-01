@@ -4,34 +4,35 @@ require_once 'includes/functions.php';
 
 use M521\Taskforce\dbManager\DbManagerCRUD;
 
+// Initialisation du gestionnaire de base de données
 $dbManager = new DbManagerCRUD();
 
-// Démarrer la session et récupérer l'email de l'utilisateur connecté
+// Démarrer la session pour récupérer l'email de l'utilisateur connecté
 session_start();
-$email = $_SESSION['email_user'];
 
-// Vérifier si l'email est dans la session
-if (!isset($email)) {
+// Vérification si l'email est bien défini dans la session, sinon arrêter l'exécution
+$email = $_SESSION['email_user'] ?? null;  // Utilisation de l'opérateur de coalescence null
+if (!$email) {
     die("Utilisateur non authentifié.");
 }
 
+// Récupérer les informations de l'utilisateur connecté à partir de l'email
 $userInfo = getUserByEmail($email, $dbManager);
 if (!$userInfo) {
     die("Utilisateur non trouvé.");
 }
 
+// Récupérer l'ID de l'utilisateur
 $userId = $userInfo->rendId();
 
-if (!isset($_GET['task_id']) || $_GET['task_id'] <= 0) {
+// Vérification si l'ID de la tâche est bien passé dans l'URL
+$taskId = $_GET['task_id'] ?? null;
+if (!$taskId || $taskId <= 0) {
     die("ID de tâche invalide.");
 }
 
-$taskId = $_GET['task_id'];
-
-// Récupérer les détails de la tâche depuis la base de données
+// Récupérer les détails de la tâche en fonction de son ID
 $task = $dbManager->getTaskById($taskId);
-
-// Si la tâche n'est pas trouvée
 if (!$task) {
     die("Tâche non trouvée.");
 }
@@ -39,12 +40,13 @@ if (!$task) {
 // Récupérer les utilisateurs associés à cette tâche
 $taskUsers = $dbManager->getTasksSharedByUserId($taskId);
 
-// Gérer la soumission du formulaire de modification
+// Vérification de la soumission du formulaire pour modifier la tâche
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $deadline = $_POST['deadline'];
-    $status = $_POST['status'];
+    // Récupérer les données du formulaire
+    $title = $_POST['title'] ?? '';
+    $description = $_POST['description'] ?? '';
+    $deadline = $_POST['deadline'] ?? '';
+    $status = $_POST['status'] ?? '';
     $assignedUsers = $_POST['assigned_users'] ?? [];
 
     try {
@@ -54,19 +56,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $task->setDateEcheance($deadline);
         $task->setStatut($status);
 
-        // Mise à jour de la tâche dans la base de données
+        // Mettre à jour la tâche dans la base de données
         $dbManager->updateTask($task, $taskId);
 
-        // Ajouter le message de succès dans la session
+        // Ajouter un message de succès dans la session
         $_SESSION['successMessage'] = "Tâche modifiée avec succès!";
     } catch (\Exception $e) {
-        // Ajouter le message d'erreur dans la session
+        // Ajouter un message d'erreur dans la session
         $_SESSION['errorMessage'] = "Erreur lors de la modification de la tâche : " . $e->getMessage();
     }
 
-    // Rediriger vers la page de détail de la tâche après la mise à jour
+    // Rediriger vers la page de détails de la tâche après la mise à jour
     header("Location: task_details.php?task_id=" . $taskId);
-    exit;
+    exit;  // Toujours utiliser exit après un header pour arrêter l'exécution du script
 }
 
 ?>
@@ -78,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détails de la Tâche</title>
+    <!-- Inclusion de Bootstrap pour le style de la page -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="style/styleSheet.css" rel="stylesheet">
 </head>
@@ -95,11 +98,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php
             if (isset($_SESSION['successMessage'])) {
                 echo '<div class="alert alert-success">' . htmlspecialchars($_SESSION['successMessage']) . '</div>';
-                unset($_SESSION['successMessage']);
+                unset($_SESSION['successMessage']); // Supprimer le message après l'affichage
             }
             if (isset($_SESSION['errorMessage'])) {
                 echo '<div class="alert alert-danger">' . htmlspecialchars($_SESSION['errorMessage']) . '</div>';
-                unset($_SESSION['errorMessage']);
+                unset($_SESSION['errorMessage']); // Supprimer le message après l'affichage
             }
             ?>
 
@@ -131,6 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="assigned_users" class="form-label">Utilisateurs associés</label>
                     <select multiple id="assigned_users" name="assigned_users[]" class="form-select">
                         <?php
+                        // Récupérer tous les utilisateurs disponibles et les afficher dans le select
                         $allUsers = $dbManager->rendAllUtilisateur();
                         foreach ($allUsers as $user) {
                             $selected = in_array($user->rendId(), $taskUsers) ? 'selected' : '';
@@ -140,8 +144,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </select>
                 </div>
 
+                <!-- Bouton pour soumettre les modifications -->
                 <div class="d-flex justify-content-between align-items-center">
-                    <!-- Bouton de mise à jour -->
                     <button type="submit" class="btn btn-primary">Mettre à jour</button>
                 </div>
             </form>
@@ -156,6 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
+    <!-- Inclusion de Bootstrap JS pour les interactions sur la page -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

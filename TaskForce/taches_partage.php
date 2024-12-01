@@ -1,57 +1,62 @@
 <?php
-require_once 'vendor/autoload.php';
-require_once 'includes/functions.php';
+require_once 'vendor/autoload.php'; 
+require_once 'includes/functions.php'; 
 
-use M521\Taskforce\dbManager\DbManagerCRUD;
+use M521\Taskforce\dbManager\DbManagerCRUD; 
 
+// Création de l'objet DbManager pour interagir avec la base de données
 $dbManager = new DbManagerCRUD();
 
-// Récupérer l'email de l'utilisateur connecté (assumé que la session est déjà démarrée)
+// Démarrage de la session et récupération de l'email de l'utilisateur connecté
 session_start();
-$email = $_SESSION['email_user'];
+$email = $_SESSION['email_user']; // Récupère l'email de l'utilisateur depuis la session
 
+// Récupération des informations de l'utilisateur à partir de l'email
 $userInfo = getUserByEmail($email, $dbManager);
 if (!$userInfo) {
-    die("Utilisateur non trouvé.");
+    die("Utilisateur non trouvé."); // Si l'utilisateur n'est pas trouvé, afficher une erreur et arrêter l'exécution
 }
 
+// Récupération de l'ID de l'utilisateur pour récupérer ses tâches partagées
 $userId = $userInfo->rendId();
 
-// Récupérer les tâches en cours de l'utilisateur
+// Récupération des tâches partagées par l'utilisateur
 $tachepartager = $dbManager->getTasksSharedByUserId($userId);
 
-// Fonction pour formater les tâches
+// Fonction pour formater les données des tâches avant affichage
 function formatTaskData($task)
 {
-    $task['dateEcheance'] = formatDateEcheance($task['dateEcheance']);
-    $task['statut'] = formatStatut($task['statut']);
+    $task['dateEcheance'] = formatDateEcheance($task['dateEcheance']); // Formatage de la date d'échéance
+    $task['statut'] = formatStatut($task['statut']); // Traduction du statut
     return $task;
 }
 
-// Formatage de la date
+// Fonction pour formater la date d'échéance au format 'dd.mm.yyyy'
 function formatDateEcheance($dateEcheance)
 {
     if ($dateEcheance) {
-        $d = DateTime::createFromFormat('Y-m-d', $dateEcheance);
-        return $d ? $d->format('d.m.Y') : null;
+        $d = DateTime::createFromFormat('Y-m-d', $dateEcheance); // Création d'un objet DateTime à partir de la date
+        return $d ? $d->format('d.m.Y') : null; // Retourne la date au format souhaité
     }
-    return null;
+    return null; // Si aucune date, retourne null
 }
 
-// Formatage du statut
+// Fonction pour traduire le statut d'une tâche en texte lisible
 function formatStatut($statut)
 {
+    // Tableau associatif pour traduire les statuts de la tâche
     $statutTraduction = [
         'a_faire' => 'À faire',
         'en_cours' => 'En cours',
         'termine' => 'Terminé',
     ];
-    return $statutTraduction[$statut] ?? 'Inconnu';
+    return $statutTraduction[$statut] ?? 'Inconnu'; // Retourne le statut traduit ou 'Inconnu' si inconnu
 }
 
-// Formater toutes les tâches avant affichage
+// Application du formatage à chaque tâche récupérée
 $tachepartager = array_map('formatTaskData', $tachepartager);
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -59,23 +64,27 @@ $tachepartager = array_map('formatTaskData', $tachepartager);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tâches partagées</title>
+    <!-- Intégration de Bootstrap pour la mise en forme -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="style/styleSheet.css" rel="stylesheet">
+    <link href="style/styleSheet.css" rel="stylesheet"> <!-- Feuille de style personnalisée -->
 </head>
 
 <body>
     <div class="d-flex">
-        <!-- Inclusion de la sidebar -->
+        <!-- Inclusion de la sidebar (menu latéral) -->
         <?php include 'includes/sidebar.php'; ?>
 
+        <!-- Contenu principal -->
         <div class="main-content ms-auto col-md-9 col-lg-10 p-5">
             <h2 class="text-center mb-4">Tâches partagées</h2>
 
+            <!-- Vérification si des tâches partagées existent -->
             <?php if (empty($tachepartager)): ?>
                 <div class="alert alert-info mt-4" role="alert">
                     <p>Aucune tâche partagée pour le moment.</p>
                 </div>
             <?php else: ?>
+                <!-- Table responsive pour afficher les tâches partagées -->
                 <div class="table-responsive pt-4">
                     <table class="table table-hover align-middle">
                         <thead class="table-primary">
@@ -88,6 +97,7 @@ $tachepartager = array_map('formatTaskData', $tachepartager);
                             </tr>
                         </thead>
                         <tbody>
+                            <!-- Boucle pour afficher chaque tâche partagée -->
                             <?php foreach ($tachepartager as $task): ?>
                                 <tr>
                                     <td class="fw-bold text-dark p-3"><?php echo htmlspecialchars($task['titre']); ?></td>
@@ -96,14 +106,15 @@ $tachepartager = array_map('formatTaskData', $tachepartager);
                                     </td>
                                     <td class="text-muted"><?php echo htmlspecialchars($task['dateEcheance']); ?></td>
                                     <td>
+                                        <!-- Affichage du statut de la tâche avec un badge -->
                                         <span class="badge <?php echo getStatusBadgeClass($task['statut']); ?> me-1">
                                             <?php echo htmlspecialchars($task['statut']); ?>
                                         </span>
                                     </td>
                                     <td>
+                                        <!-- Affichage des utilisateurs partagés (exclure l'utilisateur connecté) -->
                                         <?php
-                                        // Affichage des utilisateurs partagés
-                                        $sharedUsers = explode(',', $task['shared_user_names']);
+                                        $sharedUsers = explode(',', $task['shared_user_names']); // Récupère les emails des utilisateurs partagés
                                         foreach ($sharedUsers as $userEmailFromTask):
                                             // Ne pas afficher l'utilisateur connecté
                                             if ($_SESSION['email_user'] === $userEmailFromTask) {
@@ -126,9 +137,10 @@ $tachepartager = array_map('formatTaskData', $tachepartager);
         </div>
     </div>
 
+    <!-- Inclusion de Bootstrap JS pour les composants interactifs -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Initialisation des tooltips Bootstrap
+        // Initialisation des tooltips Bootstrap pour afficher les informations sur les utilisateurs
         let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         let tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);

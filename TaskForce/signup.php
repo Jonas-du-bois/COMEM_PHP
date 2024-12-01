@@ -1,14 +1,9 @@
 <?php
-
-require_once 'vendor\autoload.php';
-
-use Symfony\Component\Mailer\Transport;
-use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mime\Email;
+require_once 'vendor/autoload.php';
+require_once 'mail/sendConfirmationEmail.php'; // Inclure le fichier d'envoi d'email
 
 use M521\Taskforce\dbManager\DbManagerCRUD;
 use M521\Taskforce\dbManager\Users;
-
 ?>
 
 <!DOCTYPE html>
@@ -65,45 +60,30 @@ use M521\Taskforce\dbManager\Users;
                 $dbUser->creeTable();
 
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                    // Récupérer les données du formulaire avec filter_input
+                    // Récupérer les données du formulaire
                     $nom = filter_input(INPUT_POST, 'lastname', FILTER_SANITIZE_SPECIAL_CHARS);
                     $prenom = filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_SPECIAL_CHARS);
                     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
                     $noTel = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_SPECIAL_CHARS);
                     $motDePasse = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
 
-                    // Regex pour valider les prénoms et noms (lettres et espaces uniquement)
-                    $namePattern = "/^[a-zA-ZÀ-ÿ' -]{3,20}$/";
+                    // Validation des données
+                    $errors = [];
 
-                    // Regex pour le numéro de téléphone (format international ou local)
-                    $telPattern = "/^\+?[0-9]{10,15}$/";
-
-                    // Regex pour le mot de passe avec les caractères spéciaux
-                    $passwordPattern = "/^(?=.*[A-Z])(?=.*[\W_])(?=.{8,})/";
-
-                    $errors = []; // Tableau pour stocker les messages d'erreur
-                    // Validation du prénom
-                    if (!preg_match($namePattern, $prenom)) {
-                        $errors[] = "Le prénom est invalide. Veuillez utiliser uniquement des lettres et des espaces.";
+                    // Validation du prénom, nom, téléphone, email, et mot de passe
+                    if (!preg_match("/^[a-zA-ZÀ-ÿ' -]{3,20}$/", $prenom)) {
+                        $errors[] = "Le prénom est invalide.";
                     }
-
-                    // Validation du nom
-                    if (!preg_match($namePattern, $nom)) {
-                        $errors[] = "Le nom est invalide. Veuillez utiliser uniquement des lettres et des espaces.";
+                    if (!preg_match("/^[a-zA-ZÀ-ÿ' -]{3,20}$/", $nom)) {
+                        $errors[] = "Le nom est invalide.";
                     }
-
-                    // Validation de l'adresse e-mail
                     if (!$email) {
                         $errors[] = "L'adresse e-mail est invalide.";
                     }
-
-                    // Validation du numéro de téléphone
-                    if (!preg_match($telPattern, $noTel)) {
-                        $errors[] = "Le numéro de téléphone est invalide. Veuillez entrer un numéro valide (10 à 15 chiffres).";
+                    if (!preg_match("/^\+?[0-9]{10,15}$/", $noTel)) {
+                        $errors[] = "Le numéro de téléphone est invalide.";
                     }
-
-                    // Validation du mot de passe
-                    if (!preg_match($passwordPattern, $motDePasse)) {
+                    if (!preg_match("/^(?=.*[A-Z])(?=.*[\W_])(?=.{8,})/", $motDePasse)) {
                         $errors[] = "Le mot de passe doit comporter au moins 8 caractères, dont une majuscule et un caractère spécial.";
                     }
 
@@ -114,71 +94,19 @@ use M521\Taskforce\dbManager\Users;
                         }
                     } else {
                         // Si toutes les validations passent, traiter les données
-                        // Création d'un nouvel utilisateur
                         $newUser = new Users($prenom, $nom, $email, $noTel, $motDePasse);
-
-                        // Génération du token de confirmation
                         $token = $newUser->rendToken();
 
                         try {
-                            // Ajout du nouvel utilisateur dans la base de données
+                            // Ajouter l'utilisateur dans la base de données
                             $id = $dbUser->ajoutePersonne($newUser);
 
-                            // Lien de confirmation
-                            $confirmationLink = "http://localhost/Taskforce/confirmation.php?token=" . urlencode($token);
-
                             // Envoi du mail de confirmation
-                            $transport = Transport::fromDsn('smtp://localhost:1025');
-                            $mailer = new Mailer($transport);
-                            $message = (new Email())
-                                ->from('support@taskforce.com')
-                                ->to($email)
-                                ->subject('Confirmation de votre inscription')
-                                ->html("
-        <!DOCTYPE html>
-        <html lang='fr'>
-        <head>
-            <meta charset='UTF-8'>
-            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <title>Confirmation d'inscription</title>
-            <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css' rel='stylesheet'>
-        </head>
-        <body style='background-color: #f8f9fa; font-family: Arial, sans-serif;'>
-            <div class='container d-flex justify-content-center align-items-center' style='min-height: 100vh;'>
-                <div class='card shadow-lg' style='max-width: 600px; width: 100%; border-radius: 10px;'>
-                    <div class='card-body p-4'>
-                        <h2 class='text-center mb-4' style='color: #0d6efd;'>Bienvenue sur TaskForce</h2>
-                        <p>Bonjour <strong>$prenom</strong>,</p>
-                        <p class='mb-4'>
-                            Merci de vous être inscrit à notre plateforme ! Veuillez confirmer votre inscription pour activer votre compte et commencer à organiser vos tâches efficacement.
-                        </p>
-                        <div class='text-center mb-4'>
-                            <a href='$confirmationLink' class='btn btn-primary' style='padding: 10px 20px; font-size: 16px;'>
-                                Confirmer mon inscription
-                            </a>
-                        </div>
-                        <p class='text-muted text-center' style='font-size: 14px;'>
-                            Si vous n'avez pas demandé cette inscription, veuillez ignorer cet email.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </body>
-        </html>
-    ");
-
-                            // Envoyer l'email
-                            $mailer->send($message);
+                            sendConfirmationEmail($prenom, $email, $token);
 
                             echo "<p style='color: green;'>Bravo, tu as réussi ton inscription ! Un mail de confirmation a été envoyé.</p>";
                         } catch (PDOException $e) {
-                            // Vérification du code d'erreur pour la contrainte d'unicité
-                            if ($e->getCode() == 23000) {  // 23000 est le code pour les violations de contrainte d'unicité
-                                echo "<p style='color: red;'>Le numéro de téléphone ou l'adresse mail que vous avez fourni est déjà utilisé. Veuillez en essayer un autre.</p>";
-                            } else {
-                                // Pour d'autres types d'erreurs
-                                echo "<p style='color: red;'>Une erreur est survenue lors de l'ajout de l'utilisateur. Veuillez réessayer.</p>";
-                            }
+                            echo "<p style='color: red;'>Une erreur est survenue lors de l'ajout de l'utilisateur. Veuillez réessayer.</p>";
                         }
                     }
                 }

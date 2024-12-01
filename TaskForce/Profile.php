@@ -5,6 +5,7 @@ require_once 'vendor/autoload.php';
 use M521\Taskforce\dbManager\DbManagerCRUD;
 use M521\Taskforce\dbManager\Users;
 
+// Création d'une instance du gestionnaire de base de données
 $dbManager = new DbManagerCRUD();
 ?>
 
@@ -21,36 +22,37 @@ $dbManager = new DbManagerCRUD();
 
 <body>
     <div class="d-flex">
-        <!-- Inclusion de la sidebar -->
+        <!-- Inclusion de la barre latérale -->
         <?php include 'includes/sidebar.php'; ?>
 
         <?php
+        // Récupération de l'email de l'utilisateur connecté à partir de la session
         $userEmail = $_SESSION['email_user'];
 
-        // Récupération des informations utilisateur
+        // Récupération des informations de l'utilisateur à partir de la base de données
         $userInfoArray = $dbManager->rendPersonnes($userEmail);
         if (empty($userInfoArray)) {
-            die("Utilisateur introuvable.");
+            die("Utilisateur introuvable."); // Si l'utilisateur n'est pas trouvé, on arrête l'exécution
         }
 
         // L'utilisateur est unique, récupération de ses informations
         $userInfo = $userInfoArray[0];
 
-        // Définition des expressions régulières pour les validations
+        // Définition des expressions régulières pour valider les champs
         $namePattern = "/^[a-zA-ZÀ-ÿ' -]{3,20}$/";  // Prénom et Nom : 3 à 20 caractères, lettres et espaces
         $telPattern = "/^\+?[0-9]{10,15}$/";  // Téléphone : 10 à 15 chiffres (format international ou local)
         $passwordPattern = "/^(?=.*[A-Z])(?=.*[\W_])(?=.{8,})/";  // Mot de passe : minimum 8 caractères, une majuscule et un caractère spécial
 
         // Initialisation des erreurs
         $errors = [];
-
         ?>
 
-<div class="main-content ms-auto col-md-9 col-lg-10 p-4">
+        <div class="main-content ms-auto col-md-9 col-lg-10 p-4">
             <main class="container py-5">
                 <div class="p-4">
                     <h1 class="text-center mb-4">Mon Profil</h1>
 
+                    <!-- Formulaire de mise à jour du profil -->
                     <form method="POST" action="">
                         <div class="mb-3">
                             <label for="prenom" class="form-label">Prénom</label>
@@ -76,9 +78,10 @@ $dbManager = new DbManagerCRUD();
                     </form>
 
                     <?php
+                    // Traitement du formulaire après soumission
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         try {
-                            // Validation des données
+                            // Récupération et validation des données du formulaire
                             $prenom = htmlspecialchars(trim($_POST['prenom']));
                             $nom = htmlspecialchars(trim($_POST['nom']));
                             $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
@@ -94,6 +97,7 @@ $dbManager = new DbManagerCRUD();
                                 $errors[] = "Le nom est invalide. Veuillez utiliser uniquement des lettres et des espaces.";
                             }
 
+                            // Validation du numéro de téléphone
                             $noTel = preg_match($telPattern, $_POST['noTel']) ? trim($_POST['noTel']) : null;
                             if (!$noTel) {
                                 $errors[] = "Le numéro de téléphone n'est pas valide.";
@@ -105,12 +109,13 @@ $dbManager = new DbManagerCRUD();
                                 $errors[] = "Le mot de passe doit comporter au moins 8 caractères, dont une majuscule et un caractère spécial.";
                             }
 
+                            // Si des erreurs existent, on les affiche
                             if (!empty($errors)) {
                                 foreach ($errors as $error) {
                                     echo "<p style='color: red;'>$error</p>";
                                 }
                             } else {
-                                // Si tout est valide, mise à jour de l'utilisateur
+                                // Si aucune erreur, on procède à la mise à jour de l'utilisateur
                                 $motDePasseHash = !empty($motDePasse) ? password_hash($motDePasse, PASSWORD_DEFAULT) : $userInfo->rendMotDePasse();
                                 $updatedUser = new Users(
                                     $prenom,
@@ -121,31 +126,34 @@ $dbManager = new DbManagerCRUD();
                                     $userInfo->rendId()
                                 );
 
+                                // Mise à jour dans la base de données
                                 $dbManager->modifiePersonne($userInfo->rendId(), $updatedUser);
 
-                                // Mise à jour de la variable de session
+                                // Mise à jour de la session avec le nouvel email
                                 $_SESSION['email_user'] = $email;
 
-                                // Réactualisation des informations utilisateur
+                                // Réactualisation des informations utilisateur après mise à jour
                                 $userInfoArray = $dbManager->rendPersonnes($email);
                                 $userInfo = $userInfoArray[0];
 
+                                // Message de succès
                                 $message = ['type' => 'success', 'text' => 'Profil mis à jour avec succès.'];
                             }
                         } catch (Exception $e) {
+                            // Gestion des erreurs spécifiques
                             if ($e->getCode() == 23000) {
                                 $message = ['type' => 'danger', 'text' => 'Le numéro de téléphone ou l\'adresse mail que vous avez fourni est déjà utilisé.'];
                             } else {
                                 $message = ['type' => 'danger', 'text' => 'Une erreur est survenue : ' . $e->getMessage()];
                             }
                         }
-                        // rechargement de la page avec un délais de 2 seconds
+
+                        // Rechargement de la page après 2 secondes pour éviter le renvoi multiple du formulaire
                         header("Refresh:2");
                     }
-
                     ?>
 
-                    <!-- Affichage des erreurs ou des succès -->
+                    <!-- Affichage des erreurs ou succès -->
                     <?php if (isset($message)) : ?>
                         <div class="alert alert-<?= htmlspecialchars($message['type']) ?>">
                             <?= htmlspecialchars($message['text']) ?>
@@ -153,9 +161,11 @@ $dbManager = new DbManagerCRUD();
                     <?php endif; ?>
 
                 </div>
+            </main>
         </div>
-        </main>
     </div>
+
+    <!-- Intégration de Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
