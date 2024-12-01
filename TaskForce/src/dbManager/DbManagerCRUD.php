@@ -412,21 +412,22 @@ class DbManagerCRUD implements I_ApiCRUD
      * @throws \Exception Si la suppression échoue
      */
     public function deleteTask(int $taskId): void
-    {
-        try {
-            // Supprimer les utilisateurs associés
-            $stmt = $this->db->prepare("DELETE FROM task_users WHERE task_id = :task_id");
-            $stmt->bindValue(':task_id', $taskId);
-            $stmt->execute();
+{
+    try {
+        // Supprimer les utilisateurs associés
+        $stmt = $this->db->prepare("DELETE FROM task_users WHERE taskId = :taskId");
+        $stmt->bindValue(':taskId', $taskId);
+        $stmt->execute();
 
-            // Supprimer la tâche
-            $stmt = $this->db->prepare("DELETE FROM tasks WHERE id = :task_id");
-            $stmt->bindValue(':task_id', $taskId);
-            $stmt->execute();
-        } catch (\PDOException $e) {
-            throw new \Exception('Erreur lors de la suppression de la tâche : ' . $e->getMessage());
-        }
+        // Supprimer la tâche
+        $stmt = $this->db->prepare("DELETE FROM tasks WHERE id = :taskId");
+        $stmt->bindValue(':taskId', $taskId);
+        $stmt->execute();
+    } catch (\PDOException $e) {
+        throw new \Exception('Erreur lors de la suppression de la tâche : ' . $e->getMessage());
     }
+}
+
 
     /**
      * Récupère toutes les tâches.

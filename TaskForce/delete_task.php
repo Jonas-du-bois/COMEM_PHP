@@ -4,29 +4,53 @@ require_once 'includes/functions.php';
 
 use M521\Taskforce\dbManager\DbManagerCRUD;
 
-session_start(); // Démarrage de la session
 $dbManager = new DbManagerCRUD();
 
-if (isset($_POST['delete_task'])) {
-    try {
-        // Validation sécurisée de l'ID de tâche
-        $taskId = filter_input(INPUT_GET, 'task_id', FILTER_VALIDATE_INT);
-        if (!$taskId) {
-            die("ID de tâche invalide.");
-        }
+// Démarrer la session et récupérer l'email de l'utilisateur connecté
+session_start();
+$email = $_SESSION['email_user'];
 
-        // Supprimer la tâche dans la base de données
-        $dbManager->deleteTask($taskId);
-
-        // Ajouter un message de succès
-        $_SESSION['successMessage'] = "Tâche supprimée avec succès !";
-
-        // Rediriger vers la liste des tâches après la suppression
-        header("Location: task_details.php"); // Assurez-vous que cette page existe
-        exit;
-    } catch (\Exception $e) {
-        // Ajouter un message d'erreur
-        $_SESSION['errorMessage'] = "Erreur lors de la suppression de la tâche : " . $e->getMessage();
-    }
+// Vérifier si l'email est dans la session
+if (!isset($email)) {
+    die("Utilisateur non authentifié.");
 }
 
+$userInfo = getUserByEmail($email, $dbManager);
+if (!$userInfo) {
+    die("Utilisateur non trouvé.");
+}
+
+$userId = $userInfo->rendId();
+
+// Vérifier si l'ID de la tâche est passé dans l'URL
+if (!isset($_GET['task_id']) || $_GET['task_id'] <= 0) {
+    die("ID de tâche invalide.");
+}
+
+$taskId = $_GET['task_id'];
+
+// Récupérer la tâche depuis la base de données
+$task = $dbManager->getTaskById($taskId);
+
+// Si la tâche n'est pas trouvée, rediriger avec un message d'erreur
+if (!$task) {
+    $_SESSION['errorMessage'] = "Tâche non trouvée.";
+    header("Location: dashboard.php"); // Rediriger vers la liste des tâches
+    exit;
+}
+
+try {
+    // Supprimer la tâche
+    $dbManager->deleteTask($taskId);
+
+    // Message de succès
+    $_SESSION['successMessage'] = "Tâche supprimée avec succès!";
+} catch (\Exception $e) {
+    // Message d'erreur
+    $_SESSION['errorMessage'] = "Erreur lors de la suppression de la tâche : " . $e->getMessage();
+}
+
+// Rediriger vers la liste des tâches après suppression
+header("Location: dashboard.php");
+exit;
+?>

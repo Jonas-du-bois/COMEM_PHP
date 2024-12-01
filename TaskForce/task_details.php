@@ -73,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -80,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="style/styleSheet.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="d-flex">
         <!-- Inclusion de la sidebar -->
@@ -139,20 +141,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center">
-                    <!-- Bouton de suppression -->
-                    <form method="POST" action="delete_task.php?task_id=<?php echo $taskId; ?>" class="mb-0">
-                        <button type="submit" name="delete_task" class="btn btn-danger">Supprimer la tâche</button>
-                    </form>
-
                     <!-- Bouton de mise à jour -->
                     <button type="submit" class="btn btn-primary">Mettre à jour</button>
                 </div>
             </form>
+
+            <!-- Formulaire pour supprimer la tâche -->
+            <form method="POST" action="delete_task.php?task_id=<?php echo $taskId; ?>" class="mb-0">
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <button type="submit" name="delete_task" class="btn btn-danger">Supprimer la tâche</button>
+                </div>
+            </form>
+
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
-
-
