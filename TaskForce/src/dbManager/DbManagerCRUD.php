@@ -243,7 +243,7 @@ class DbManagerCRUD implements I_ApiCRUD
         $sql = "INSERT INTO tasks (userId, titre, description, dateEcheance, statut) 
                 VALUES (:userId, :titre, :description, :dateEcheance, :statut)";
         $stmt = $this->db->prepare($sql);
-    
+
         $params = [
             ':userId' => $task->rendUserIds()[0],  // On utilise juste un utilisateur pour la tâche ici, mais on va gérer plusieurs plus tard
             ':titre' => $task->rendTitre(),
@@ -251,18 +251,18 @@ class DbManagerCRUD implements I_ApiCRUD
             ':dateEcheance' => $task->rendDateEcheance(),
             ':statut' => $task->rendStatut()
         ];
-    
+
         try {
             // Exécution de l'insertion de la tâche
             $stmt->execute($params);
-    
+
             // Récupérer l'ID de la tâche insérée
             $taskId = $this->db->lastInsertId();
-    
+
             // Deuxième étape : Associer les utilisateurs à la tâche dans la table task_users
             $sqlTaskUser = "INSERT INTO task_users (taskId, userId) VALUES (:taskId, :userId)";
             $stmtTaskUser = $this->db->prepare($sqlTaskUser);
-    
+
             // Insertion de l'association dans task_users pour chaque utilisateur
             foreach ($task->rendUserIds() as $userId) {
                 $stmtTaskUser->execute([
@@ -270,7 +270,7 @@ class DbManagerCRUD implements I_ApiCRUD
                     ':userId' => $userId  // ID de l'utilisateur
                 ]);
             }
-    
+
             return $taskId;
         } catch (\PDOException $e) {
             echo "Erreur lors de la création de la tâche : " . $e->getMessage();
@@ -284,24 +284,24 @@ class DbManagerCRUD implements I_ApiCRUD
      * @throws \Exception
      */
     public function assignUsersToTask(int $taskId, array $userIds): void
-{
-    try {
-        // Supprimer toutes les associations existantes pour cette tâche
-        $stmt = $this->db->prepare("DELETE FROM task_users WHERE taskId = :taskId");
-        $stmt->bindValue(':taskId', $taskId);
-        $stmt->execute();
-
-        // Ajouter les nouvelles associations
-        $stmt = $this->db->prepare("INSERT INTO task_users (taskId, userId) VALUES (:taskId, :userId)");
-        foreach ($userIds as $userId) {
+    {
+        try {
+            // Supprimer toutes les associations existantes pour cette tâche
+            $stmt = $this->db->prepare("DELETE FROM task_users WHERE taskId = :taskId");
             $stmt->bindValue(':taskId', $taskId);
-            $stmt->bindValue(':userId', $userId);
             $stmt->execute();
+
+            // Ajouter les nouvelles associations
+            $stmt = $this->db->prepare("INSERT INTO task_users (taskId, userId) VALUES (:taskId, :userId)");
+            foreach ($userIds as $userId) {
+                $stmt->bindValue(':taskId', $taskId);
+                $stmt->bindValue(':userId', $userId);
+                $stmt->execute();
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('Erreur lors de l\'assignation des utilisateurs à la tâche : ' . $e->getMessage());
         }
-    } catch (\PDOException $e) {
-        throw new \Exception('Erreur lors de l\'assignation des utilisateurs à la tâche : ' . $e->getMessage());
     }
-}
 
     /**
      * Récupère une tâche en fonction de son ID.
@@ -317,17 +317,17 @@ class DbManagerCRUD implements I_ApiCRUD
             $stmt->bindValue(':task_id', $taskId);
             $stmt->execute();
             $taskData = $stmt->fetch(\PDO::FETCH_ASSOC);
-    
+
             if (!$taskData) {
                 throw new \Exception('Tâche introuvable.');
             }
-    
+
             // Récupérer les utilisateurs associés à la tâche
             $stmt = $this->db->prepare("SELECT userId FROM task_users WHERE taskId = :taskId");
             $stmt->bindValue(':taskId', $taskId);
             $stmt->execute();
             $userIds = $stmt->fetchAll(\PDO::FETCH_COLUMN);
-    
+
             // Créer l'objet Task sans ID
             $task = new Task(
                 $taskData['titre'],
@@ -336,16 +336,16 @@ class DbManagerCRUD implements I_ApiCRUD
                 $taskData['dateEcheance'],
                 $taskData['statut']
             );
-    
+
             // Attribuer l'ID après l'instanciation
             $task->setId($taskData['id']); // Affectation de l'ID après création de l'objet
-    
+
             return $task;
         } catch (\PDOException $e) {
             throw new \Exception('Erreur lors de la récupération de la tâche : ' . $e->getMessage());
         }
     }
-    
+
     /**
      * Met à jour une tâche existante.
      * @param Task $task Objet Task avec les nouvelles données
@@ -369,20 +369,20 @@ class DbManagerCRUD implements I_ApiCRUD
                 ':statut' => $task->rendStatut(),
                 ':taskId' => $taskId
             ]);
-    
+
             // Étape 2 : Gérer les relations dans task_users
             // Récupérer les associations existantes
             $stmt = $this->db->prepare("SELECT userId FROM task_users WHERE taskId = :taskId");
             $stmt->bindValue(':taskId', $taskId);
             $stmt->execute();
             $existingUserIds = $stmt->fetchAll(\PDO::FETCH_COLUMN, 0); // Récupère un tableau d'userIds
-    
+
             $newUserIds = $task->rendUserIds();
-    
+
             // Calculer les IDs à ajouter et à supprimer
             $userIdsToAdd = array_diff($newUserIds, $existingUserIds); // Nouveaux utilisateurs
             $userIdsToRemove = array_diff($existingUserIds, $newUserIds); // Utilisateurs à supprimer
-    
+
             // Supprimer les associations obsolètes
             if (!empty($userIdsToRemove)) {
                 $stmt = $this->db->prepare("DELETE FROM task_users WHERE taskId = :taskId AND userId = :userId");
@@ -390,7 +390,7 @@ class DbManagerCRUD implements I_ApiCRUD
                     $stmt->execute([':taskId' => $taskId, ':userId' => $userId]);
                 }
             }
-    
+
             // Ajouter les nouvelles associations
             if (!empty($userIdsToAdd)) {
                 $stmt = $this->db->prepare("INSERT INTO task_users (taskId, userId) VALUES (:taskId, :userId)");
@@ -398,7 +398,7 @@ class DbManagerCRUD implements I_ApiCRUD
                     $stmt->execute([':taskId' => $taskId, ':userId' => $userId]);
                 }
             }
-    
+
             return true;
         } catch (\PDOException $e) {
             // Gestion des erreurs
@@ -462,92 +462,92 @@ class DbManagerCRUD implements I_ApiCRUD
         }
     }
 
-    public function getTasksByUserId(int $userId): array {
-    try {
-        // Préparer la requête SQL pour récupérer toutes les tâches associées à un utilisateur
-        $stmt = $this->db->prepare("
+    public function getTasksByUserId(int $userId): array
+    {
+        try {
+            // Préparer la requête SQL pour récupérer toutes les tâches associées à un utilisateur
+            $stmt = $this->db->prepare("
             SELECT t.* FROM tasks t
             JOIN task_users tu ON t.id = tu.taskId
             WHERE tu.userId = :userId
         ");
-        $stmt->bindValue(':userId', $userId);
-        $stmt->execute();
+            $stmt->bindValue(':userId', $userId);
+            $stmt->execute();
 
-        // Tableau pour stocker les tâches récupérées
-        $tasks = [];
+            // Tableau pour stocker les tâches récupérées
+            $tasks = [];
 
-        // Récupérer les résultats et les formater en objets Task
-        while ($taskData = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-            // Pour chaque tâche, récupérer également les utilisateurs associés
-            $stmtUsers = $this->db->prepare("SELECT userId FROM task_users WHERE taskId = :taskId");
-            $stmtUsers->bindValue(':taskId', $taskData['id']);
-            $stmtUsers->execute();
-            $userIds = $stmtUsers->fetchAll(\PDO::FETCH_COLUMN);
+            // Récupérer les résultats et les formater en objets Task
+            while ($taskData = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                // Pour chaque tâche, récupérer également les utilisateurs associés
+                $stmtUsers = $this->db->prepare("SELECT userId FROM task_users WHERE taskId = :taskId");
+                $stmtUsers->bindValue(':taskId', $taskData['id']);
+                $stmtUsers->execute();
+                $userIds = $stmtUsers->fetchAll(\PDO::FETCH_COLUMN);
 
-            // Ajouter chaque tâche dans le tableau de retour
-            $tasks[] = new Task(
-                $taskData['titre'],
-                $taskData['description'],
-                $userIds,
-                $taskData['dateEcheance'],
-                $taskData['statut'],
-                $taskData['id']  // Inclure l'ID de la tâche
-            );
+                // Ajouter chaque tâche dans le tableau de retour
+                $tasks[] = new Task(
+                    $taskData['titre'],
+                    $taskData['description'],
+                    $userIds,
+                    $taskData['dateEcheance'],
+                    $taskData['statut'],
+                    $taskData['id']  // Inclure l'ID de la tâche
+                );
+            }
+
+            return $tasks;
+        } catch (\PDOException $e) {
+            // Gestion des erreurs
+            throw new \Exception('Erreur lors de la récupération des tâches : ' . $e->getMessage());
         }
-
-        return $tasks;
-
-    } catch (\PDOException $e) {
-        // Gestion des erreurs
-        throw new \Exception('Erreur lors de la récupération des tâches : ' . $e->getMessage());
     }
-}
 
-public function getTasksByUserIdAndStatus($userId, $status) {
-    try {
-        // Préparer la requête pour récupérer les tâches en fonction de l'utilisateur et du statut
-        $stmt = $this->db->prepare('
+    public function getTasksByUserIdAndStatus($userId, $status)
+    {
+        try {
+            // Préparer la requête pour récupérer les tâches en fonction de l'utilisateur et du statut
+            $stmt = $this->db->prepare('
             SELECT t.id, t.titre, t.description, t.dateEcheance, t.statut
             FROM tasks t
             JOIN task_users tu ON t.id = tu.taskId
             WHERE tu.userId = :userId AND t.statut = :status
         ');
-        // Exécuter la requête avec les paramètres
-        $stmt->execute(['userId' => $userId, 'status' => $status]);
+            // Exécuter la requête avec les paramètres
+            $stmt->execute(['userId' => $userId, 'status' => $status]);
 
-        // Tableau pour stocker les tâches
-        $tasks = [];
-        
-        // Boucler sur les résultats
-        while ($taskData = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-            // Instancier l'objet Task pour chaque ligne de résultats
-            // Si le constructeur de Task attend un tableau pour les utilisateurs, on envoie un tableau vide
-            // ou la valeur que vous voulez envoyer (par exemple, un tableau d'IDs d'utilisateurs si nécessaire)
-            $task = new Task(
-                $taskData['titre'],
-                $taskData['description'],
-                [], // Tableau vide pour les utilisateurs si ce n'est pas nécessaire
-                $taskData['dateEcheance'],
-                $taskData['statut']
-            );
-            
-            // Ajouter la tâche au tableau
-            $tasks[] = $task;
+            // Tableau pour stocker les tâches
+            $tasks = [];
+
+            // Boucler sur les résultats
+            while ($taskData = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                // Instancier l'objet Task pour chaque ligne de résultats
+                // Si le constructeur de Task attend un tableau pour les utilisateurs, on envoie un tableau vide
+                // ou la valeur que vous voulez envoyer (par exemple, un tableau d'IDs d'utilisateurs si nécessaire)
+                $task = new Task(
+                    $taskData['titre'],
+                    $taskData['description'],
+                    [], // Tableau vide pour les utilisateurs si ce n'est pas nécessaire
+                    $taskData['dateEcheance'],
+                    $taskData['statut']
+                );
+
+                // Ajouter la tâche au tableau
+                $tasks[] = $task;
+            }
+
+            // Retourner le tableau de tâches
+            return $tasks;
+        } catch (\PDOException $e) {
+            // Gérer l'erreur en cas de problème
+            throw new \Exception("Erreur lors de la récupération des tâches : " . $e->getMessage());
         }
-
-        // Retourner le tableau de tâches
-        return $tasks;
-
-    } catch (\PDOException $e) {
-        // Gérer l'erreur en cas de problème
-        throw new \Exception("Erreur lors de la récupération des tâches : " . $e->getMessage());
     }
-}
 
-public function getTasksSharedByUserId(int $userId): array
-{
-    try {
-        $stmt = $this->db->prepare("
+    public function getTasksSharedByUserId(int $userId): array
+    {
+        try {
+            $stmt = $this->db->prepare("
             SELECT 
                 t.*, 
                 GROUP_CONCAT(u.email) AS shared_user_names
@@ -567,27 +567,77 @@ public function getTasksSharedByUserId(int $userId): array
             )
             GROUP BY t.id
         ");
-        $stmt->bindValue(':userId', $userId, \PDO::PARAM_INT);
-        $stmt->execute();
+            $stmt->bindValue(':userId', $userId, \PDO::PARAM_INT);
+            $stmt->execute();
 
-        $tasks = [];
+            $tasks = [];
 
-        while ($taskData = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-            $tasks[] = [
-                'titre' => $taskData['titre'],
-                'description' => $taskData['description'],
-                'dateEcheance' => $taskData['dateEcheance'],
-                'statut' => $taskData['statut'],
-                'shared_user_names' => $taskData['shared_user_names']
-            ];
+            while ($taskData = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $tasks[] = [
+                    'titre' => $taskData['titre'],
+                    'description' => $taskData['description'],
+                    'dateEcheance' => $taskData['dateEcheance'],
+                    'statut' => $taskData['statut'],
+                    'shared_user_names' => $taskData['shared_user_names']
+                ];
+            }
+
+            return $tasks;
+        } catch (\PDOException $e) {
+            error_log('Erreur dans getTasksSharedByUserId : ' . $e->getMessage());
+            throw new \Exception('Erreur lors de la récupération des tâches partagées : ' . $e->getMessage());
+        }
+    }
+
+    public function getTasksByUserIdSorted(int $userId, string $sortColumn = 'titre', string $order = 'ASC'): array
+    {
+        $validSortColumns = ['titre', 'dateEcheance', 'statut'];
+        $validOrders = ['ASC', 'DESC'];
+
+        // Validation des paramètres de tri
+        if (!in_array($sortColumn, $validSortColumns)) {
+            $sortColumn = 'titre';
+        }
+        if (!in_array($order, $validOrders)) {
+            $order = 'ASC';
         }
 
-        return $tasks;
+        try {
+            // Construire la requête SQL
+            $query = "
+            SELECT t.id, t.titre, t.description, t.dateEcheance, t.statut, t.createdAt
+            FROM tasks t
+            JOIN task_users tu ON t.id = tu.taskId
+            WHERE tu.userId = :userId
+            ORDER BY $sortColumn $order
+        ";
 
-    } catch (\PDOException $e) {
-        error_log('Erreur dans getTasksSharedByUserId : ' . $e->getMessage());
-        throw new \Exception('Erreur lors de la récupération des tâches partagées : ' . $e->getMessage());
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(':userId', $userId, \PDO::PARAM_INT);
+            $stmt->execute();
+
+            $tasks = [];
+            while ($taskData = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                // Récupération des IDs des utilisateurs associés
+                $stmtUsers = $this->db->prepare("SELECT userId FROM task_users WHERE taskId = :taskId");
+                $stmtUsers->bindValue(':taskId', $taskData['id']);
+                $stmtUsers->execute();
+                $userIds = $stmtUsers->fetchAll(\PDO::FETCH_COLUMN);
+
+                // Création de l'objet Task
+                $tasks[] = new Task(
+                    $taskData['titre'],
+                    $taskData['description'],
+                    $userIds,
+                    $taskData['dateEcheance'],
+                    $taskData['statut'],
+                    $taskData['id']
+                );
+            }
+
+            return $tasks;
+        } catch (\PDOException $e) {
+            throw new \Exception('Erreur lors de la récupération des tâches triées : ' . $e->getMessage());
+        }
     }
-}
-
 }

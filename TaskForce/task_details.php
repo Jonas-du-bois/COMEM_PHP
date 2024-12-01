@@ -91,19 +91,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <!-- Affichage des messages de succès ou d'erreur -->
             <?php
-            // Afficher les messages de succès ou d'erreur, s'ils existent
             if (isset($_SESSION['successMessage'])) {
                 echo '<div class="alert alert-success">' . htmlspecialchars($_SESSION['successMessage']) . '</div>';
-                unset($_SESSION['successMessage']); // Supprimer le message après affichage
-                header('refresh:2');
+                unset($_SESSION['successMessage']);
             }
-
             if (isset($_SESSION['errorMessage'])) {
                 echo '<div class="alert alert-danger">' . htmlspecialchars($_SESSION['errorMessage']) . '</div>';
-                unset($_SESSION['errorMessage']); // Supprimer le message après affichage
-                header('refresh:2');
+                unset($_SESSION['errorMessage']);
             }
             ?>
+
             <!-- Formulaire pour modifier la tâche -->
             <form action="task_details.php?task_id=<?php echo $taskId; ?>" method="POST">
                 <div class="mb-3">
@@ -132,7 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="assigned_users" class="form-label">Utilisateurs associés</label>
                     <select multiple id="assigned_users" name="assigned_users[]" class="form-select">
                         <?php
-                        // Récupérer tous les utilisateurs disponibles
                         $allUsers = $dbManager->rendAllUtilisateur();
                         foreach ($allUsers as $user) {
                             $selected = in_array($user->rendId(), $taskUsers) ? 'selected' : '';
@@ -142,17 +138,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Mettre à jour</button>
-            </form>
-            <!-- Formulaire pour supprimer la tâche -->
-            <form method="POST" action="delete_task.php?task_id=<?php echo $taskId; ?>">
-                <div class="mb-3 text-end">
-                <button type="submit" name="delete_task" class="btn btn-danger">Supprimer la tâche</button>
+                <div class="d-flex justify-content-between align-items-center">
+                    <!-- Bouton de suppression -->
+                    <form method="POST" action="delete_task.php?task_id=<?php echo $taskId; ?>" class="mb-0">
+                        <button type="submit" name="delete_task" class="btn btn-danger">Supprimer la tâche</button>
+                    </form>
+
+                    <!-- Bouton de mise à jour -->
+                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
                 </div>
             </form>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
 

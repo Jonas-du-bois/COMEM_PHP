@@ -16,5 +16,19 @@ function getStatusBadgeClass(string $statut): string
     return $badgeClasses[$statut] ?? 'bg-secondary';  // Par défaut, gris
 }
 
+function getSortOrder(string $column): string
+{
+    $currentOrder = $_GET['order'] ?? 'ASC';
+    $currentSort = $_GET['sort'] ?? '';
+    
+    // Inverser l'ordre si on reclique sur la même colonne
+    if ($currentSort === $column) {
+        return $currentOrder === 'ASC' ? 'DESC' : 'ASC';
+    }
+
+    return 'ASC'; // Ordre par défaut
+}
+
+
 
 
