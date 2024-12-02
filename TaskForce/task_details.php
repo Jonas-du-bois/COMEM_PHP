@@ -128,20 +128,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <option value="termine" <?php echo $task->rendStatut() == 'termine' ? 'selected' : ''; ?>>Terminé</option>
                     </select>
                 </div>
+                <div class="row">
+                    <!-- Colonne pour assigner des utilisateurs -->
+                    <div class="col-md-6">
+                        <h5>Assigner des utilisateurs</h5>
+                        <div class="mb-3">
+                            <label for="assigned_users" class="form-label">Utilisateurs associés</label>
+                            <select multiple id="assigned_users" name="assigned_users[]" class="form-select">
+                                <?php
+                                // Récupérer tous les utilisateurs disponibles et les afficher dans le select
+                                // Parcourir tous les utilisateurs assignés à la tâche
+                                $assignedUsers = $dbManager->getUsersAssignedToTask($taskId);
+                                foreach ($assignedUsers as $user) {
+                                    $selected = in_array($user['id'], $taskUsers) ? 'selected' : ''; // Assurez-vous que taskUsers est un tableau d'IDs
+                                    echo "<option value='" . $user['id'] . "' $selected>" . htmlspecialchars($user['nom']) . " " . htmlspecialchars($user['prenom']) . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
 
-                <h5>Assigner des utilisateurs</h5>
-                <div class="mb-3">
-                    <label for="assigned_users" class="form-label">Utilisateurs associés</label>
-                    <select multiple id="assigned_users" name="assigned_users[]" class="form-select">
-                        <?php
-                        // Récupérer tous les utilisateurs disponibles et les afficher dans le select
-                        $allUsers = $dbManager->rendAllUtilisateur();
-                        foreach ($allUsers as $user) {
-                            $selected = in_array($user->rendId(), $taskUsers) ? 'selected' : '';
-                            echo "<option value='" . $user->rendId() . "' $selected>" . htmlspecialchars($user->rendNom()) . " " . htmlspecialchars($user->rendPrenom()) . "</option>";
-                        }
-                        ?>
-                    </select>
+                    <!-- Colonne pour désassigner des utilisateurs -->
+                    <div class="col-md-6">
+                        <h5>Désassigner des utilisateurs</h5>
+                        <div class="mb-3">
+                            <label for="unassigned_users" class="form-label">Utilisateurs non associés</label>
+                            <select multiple id="unassigned_users" name="unassigned_users[]" class="form-select">
+                                <?php
+                                // Parcourir tous les utilisateurs disponibles (non assignés)
+                                $unassignedUsers = $dbManager->getUsersNotAssignedToTask($taskId);
+                                foreach ($unassignedUsers as $user) {
+                                    $selected = in_array($user['id'], $taskUsers) ? 'selected' : ''; // Pareil ici
+                                    echo "<option value='" . $user['id'] . "' $selected>" . htmlspecialchars($user['nom']) . " " . htmlspecialchars($user['prenom']) . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Bouton pour soumettre les modifications -->

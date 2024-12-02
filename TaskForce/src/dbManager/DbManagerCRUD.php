@@ -277,6 +277,7 @@ class DbManagerCRUD implements I_ApiCRUD
             return 0;
         }
     }
+
     /**
      * Associe des utilisateurs à une tâche dans la table de jointure.
      * @param int $taskId ID de la tâche
@@ -285,21 +286,43 @@ class DbManagerCRUD implements I_ApiCRUD
      */
     public function assignUsersToTask(int $taskId, array $userIds): void
     {
-        try {
-            // Supprimer toutes les associations existantes pour cette tâche
-            $stmt = $this->db->prepare("DELETE FROM task_users WHERE taskId = :taskId");
-            $stmt->bindValue(':taskId', $taskId);
-            $stmt->execute();
+        $sql = "INSERT INTO task_users (taskId, userId) VALUES (:taskId, :userId)";
+        $stmt = $this->db->prepare($sql);
 
-            // Ajouter les nouvelles associations
-            $stmt = $this->db->prepare("INSERT INTO task_users (taskId, userId) VALUES (:taskId, :userId)");
+        try {
+            // Associer chaque utilisateur à la tâche
             foreach ($userIds as $userId) {
-                $stmt->bindValue(':taskId', $taskId);
-                $stmt->bindValue(':userId', $userId);
-                $stmt->execute();
+                $stmt->execute([
+                    ':taskId' => $taskId,
+                    ':userId' => $userId
+                ]);
             }
         } catch (\PDOException $e) {
             throw new \Exception('Erreur lors de l\'assignation des utilisateurs à la tâche : ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Désassocie des utilisateurs d'une tâche dans la table de jointure.
+     * @param int $taskId ID de la tâche
+     * @param array $userIds Liste des IDs des utilisateurs à désassigner
+     * @throws \Exception
+     */
+    public function unassignUsersFromTask(int $taskId, array $userIds): void
+    {
+        $sql = "DELETE FROM task_users WHERE taskId = :taskId AND userId = :userId";
+        $stmt = $this->db->prepare($sql);
+
+        try {
+            // Supprimer chaque association utilisateur-tâche
+            foreach ($userIds as $userId) {
+                $stmt->execute([
+                    ':taskId' => $taskId,
+                    ':userId' => $userId
+                ]);
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('Erreur lors de la désassignation des utilisateurs à la tâche : ' . $e->getMessage());
         }
     }
 
@@ -412,21 +435,21 @@ class DbManagerCRUD implements I_ApiCRUD
      * @throws \Exception Si la suppression échoue
      */
     public function deleteTask(int $taskId): void
-{
-    try {
-        // Supprimer les utilisateurs associés
-        $stmt = $this->db->prepare("DELETE FROM task_users WHERE taskId = :taskId");
-        $stmt->bindValue(':taskId', $taskId);
-        $stmt->execute();
+    {
+        try {
+            // Supprimer les utilisateurs associés
+            $stmt = $this->db->prepare("DELETE FROM task_users WHERE taskId = :taskId");
+            $stmt->bindValue(':taskId', $taskId);
+            $stmt->execute();
 
-        // Supprimer la tâche
-        $stmt = $this->db->prepare("DELETE FROM tasks WHERE id = :taskId");
-        $stmt->bindValue(':taskId', $taskId);
-        $stmt->execute();
-    } catch (\PDOException $e) {
-        throw new \Exception('Erreur lors de la suppression de la tâche : ' . $e->getMessage());
+            // Supprimer la tâche
+            $stmt = $this->db->prepare("DELETE FROM tasks WHERE id = :taskId");
+            $stmt->bindValue(':taskId', $taskId);
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            throw new \Exception('Erreur lors de la suppression de la tâche : ' . $e->getMessage());
+        }
     }
-}
 
 
     /**
@@ -639,6 +662,68 @@ class DbManagerCRUD implements I_ApiCRUD
             return $tasks;
         } catch (\PDOException $e) {
             throw new \Exception('Erreur lors de la récupération des tâches triées : ' . $e->getMessage());
+        }
+    }
+    public function getUsersNotAssignedToTask(int $taskId): array
+    {
+        try {
+            $stmt = $this->db->prepare('
+            SELECT u.id, u.email, u.nom, u.prenom
+            FROM users u
+            WHERE u.id NOT IN (
+                SELECT tu.userId
+                FROM task_users tu
+                WHERE tu.taskId = :taskId
+            )
+        ');
+
+            $stmt->bindValue(':taskId', $taskId, \PDO::PARAM_INT);
+            $stmt->execute();
+
+            $users = [];
+            while ($userData = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $users[] = [
+                    'id' => $userData['id'],
+                    'email' => $userData['email'],
+                    'nom' => $userData['nom'],
+                    'prenom' => $userData['prenom'],
+                ];
+            }
+
+            return $users;
+        } catch (\PDOException $e) {
+            error_log('Erreur dans getUsersNotAssignedToTask : ' . $e->getMessage());
+            throw new \Exception('Erreur lors de la récupération des utilisateurs non assignés à la tâche : ' . $e->getMessage());
+        }
+    }
+
+    public function getUsersAssignedToTask(int $taskId): array
+    {
+        try {
+            $stmt = $this->db->prepare('
+            SELECT u.id, u.email, u.nom, u.prenom
+            FROM users u
+            JOIN task_users tu ON u.id = tu.userId
+            WHERE tu.taskId = :taskId
+        ');
+
+            $stmt->bindValue(':taskId', $taskId, \PDO::PARAM_INT);
+            $stmt->execute();
+
+            $users = [];
+            while ($userData = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $users[] = [
+                    'id' => $userData['id'],
+                    'email' => $userData['email'],
+                    'nom' => $userData['nom'],
+                    'prenom' => $userData['prenom'],
+                ];
+            }
+
+            return $users;
+        } catch (\PDOException $e) {
+            error_log('Erreur dans getUsersAssignedToTask : ' . $e->getMessage());
+            throw new \Exception('Erreur lors de la récupération des utilisateurs assignés à la tâche : ' . $e->getMessage());
         }
     }
 }
