@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $deadline = $_POST['deadline'] ?? '';
     $status = $_POST['status'] ?? '';
     $assignedUsers = $_POST['assigned_users'] ?? [];
+    $unassignedUsers = $_POST['unassigned_users'] ?? [];
 
     try {
         // Mettre à jour les informations de la tâche
@@ -58,6 +59,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Mettre à jour la tâche dans la base de données
         $dbManager->updateTask($task, $taskId);
+
+         // Assigner des utilisateurs à la tâche
+         if (!empty($assignedUsers)) {
+            $dbManager->assignUsersToTask($taskId, $assignedUsers);
+        }
+        
+        // Désassigner des utilisateurs de la tâche
+        if (!empty($unassignedUsers)) {
+            $dbManager->unassignUsersFromTask($taskId, $unassignedUsers);
+        }
 
         // Ajouter un message de succès dans la session
         $_SESSION['successMessage'] = "Tâche modifiée avec succès!";
@@ -133,14 +144,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-md-6">
                         <h5>Assigner des utilisateurs</h5>
                         <div class="mb-3">
-                            <label for="assigned_users" class="form-label">Utilisateurs associés</label>
+                            <label for="assigned_users" class="form-label">Utilisateurs non associés</label>
                             <select multiple id="assigned_users" name="assigned_users[]" class="form-select">
-                                <?php
-                                // Récupérer tous les utilisateurs disponibles et les afficher dans le select
-                                // Parcourir tous les utilisateurs assignés à la tâche
-                                $assignedUsers = $dbManager->getUsersAssignedToTask($taskId);
-                                foreach ($assignedUsers as $user) {
-                                    $selected = in_array($user['id'], $taskUsers) ? 'selected' : ''; // Assurez-vous que taskUsers est un tableau d'IDs
+                            <?php
+                                // Parcourir tous les utilisateurs disponibles (non assignés)
+                                $unassignedUsers = $dbManager->getUsersNotAssignedToTask($taskId);
+                                foreach ($unassignedUsers as $user) {
+                                    $selected = in_array($user['id'], $taskUsers) ? 'selected' : ''; 
                                     echo "<option value='" . $user['id'] . "' $selected>" . htmlspecialchars($user['nom']) . " " . htmlspecialchars($user['prenom']) . "</option>";
                                 }
                                 ?>
@@ -152,13 +162,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-md-6">
                         <h5>Désassigner des utilisateurs</h5>
                         <div class="mb-3">
-                            <label for="unassigned_users" class="form-label">Utilisateurs non associés</label>
+                            <label for="unassigned_users" class="form-label">Utilisateurs associés</label>
                             <select multiple id="unassigned_users" name="unassigned_users[]" class="form-select">
-                                <?php
-                                // Parcourir tous les utilisateurs disponibles (non assignés)
-                                $unassignedUsers = $dbManager->getUsersNotAssignedToTask($taskId);
-                                foreach ($unassignedUsers as $user) {
-                                    $selected = in_array($user['id'], $taskUsers) ? 'selected' : ''; // Pareil ici
+                            <?php
+                                // Récupérer tous les utilisateurs disponibles et les afficher dans le select
+                                // Parcourir tous les utilisateurs assignés à la tâche
+                                $assignedUsers = $dbManager->getUsersAssignedToTask($taskId);
+                                foreach ($assignedUsers as $user) {
+                                    $selected = in_array($user['id'], $taskUsers) ? 'selected' : ''; 
                                     echo "<option value='" . $user['id'] . "' $selected>" . htmlspecialchars($user['nom']) . " " . htmlspecialchars($user['prenom']) . "</option>";
                                 }
                                 ?>
