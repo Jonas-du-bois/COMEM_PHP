@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="row g-3 mt-3">
                     <div class="col-md-12">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" placeholder="Décrivez la tâche">
+                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Décrivez la tâche">
                             <?php echo htmlspecialchars($description ?? ''); ?>
                         </textarea>
                     </div>

@@ -89,11 +89,11 @@ $tachepartager = array_map('formatTaskData', $tachepartager);
                     <table class="table table-hover align-middle">
                         <thead class="table-primary">
                             <tr>
-                                <th scope="col">Titre</th>
-                                <th scope="col">Description</th>
+                                <th scope="col" style="width: 20%">Titre</th>
+                                <th scope="col" style="width: 30%">Description</th>
                                 <th scope="col">Date d'échéance</th>
-                                <th scope="col">Statut</th>
-                                <th scope="col">Assignée à</th>
+                                <th scope="col" style="width: 20%">Statut</th>
+                                <th scope="col" style="width: 40%">Assignée à</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -40,11 +40,13 @@ if (!empty($users)) {
 <!-- Sidebar (barre de navigation latérale) avec une position fixe à gauche de la page -->
 <div class="col-md-3 col-lg-2 bg-dark text-white sidebar position-fixed vh-100 d-flex flex-column p-3">
 
-    <!-- Titre de la section -->
-    <h4 class="mb-0">Gestion des tâches</h4>
-    
-    <!-- Affiche le nom de l'utilisateur connecté -->
-    <p class="mt-1"><?= htmlspecialchars($userName) ?></p>
+    <div class="border-bottom">
+        <!-- Titre de la section -->
+        <h4 class="mb-0">Gestion des tâches</h4>
+        
+        <!-- Affiche le nom de l'utilisateur connecté -->
+        <p class="mt-1"><?= htmlspecialchars($userName) ?></p>
+    </div>
 
     <!-- Liste des liens de navigation avec un état actif dynamique -->
     <ul class="nav nav-pills flex-column mb-auto pt-3">
@@ -64,7 +66,7 @@ if (!empty($users)) {
         foreach ($navLinks as $link => $label) {
             // Détermine si le lien est actif en comparant le nom du fichier actuel avec celui du lien
             $active = basename($_SERVER['PHP_SELF']) == $link ? 'active' : '';
-            echo "<li class='nav-item'>
+            echo "<li class='nav-item p-1'>
                     <a href='$link' class='nav-link text-white $active'>$label</a>
                   </li>";
         }
