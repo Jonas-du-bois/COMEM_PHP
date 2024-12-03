@@ -150,8 +150,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 // Parcourir tous les utilisateurs disponibles (non assignés)
                                 $unassignedUsers = $dbManager->getUsersNotAssignedToTask($taskId);
                                 foreach ($unassignedUsers as $user) {
+                                    if($user['id'] == $userId){
+                                        continue;
+                                    }else{
                                     $selected = in_array($user['id'], $taskUsers) ? 'selected' : ''; 
                                     echo "<option value='" . $user['id'] . "' $selected>" . htmlspecialchars($user['nom']) . " " . htmlspecialchars($user['prenom']) . "</option>";
+                                    }
                                 }
                                 ?>
                             </select>
@@ -169,8 +173,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 // Parcourir tous les utilisateurs assignés à la tâche
                                 $assignedUsers = $dbManager->getUsersAssignedToTask($taskId);
                                 foreach ($assignedUsers as $user) {
+                                    if($user['id'] == $userId){
+                                        continue;
+                                    }else{
                                     $selected = in_array($user['id'], $taskUsers) ? 'selected' : ''; 
                                     echo "<option value='" . $user['id'] . "' $selected>" . htmlspecialchars($user['nom']) . " " . htmlspecialchars($user['prenom']) . "</option>";
+                                    }
                                 }
                                 ?>
                             </select>

@@ -726,4 +726,41 @@ class DbManagerCRUD implements I_ApiCRUD
             throw new \Exception('Erreur lors de la récupération des utilisateurs assignés à la tâche : ' . $e->getMessage());
         }
     }
+
+    public function searchTasks(string $query, $userId): array
+{
+    try {
+        $stmt = $this->db->prepare('
+            SELECT t.id, t.titre, t.description, t.dateEcheance, t.statut
+            FROM tasks t
+            INNER JOIN task_users tu ON t.id = tu.taskId
+            WHERE tu.userId = :userId 
+            AND (t.titre LIKE :query OR t.description LIKE :query)
+            ORDER BY t.dateEcheance ASC
+            LIMIT 50
+        ');
+        $stmt->bindValue(':userId', $userId, \PDO::PARAM_INT);
+        $stmt->bindValue(':query', "%$query%", \PDO::PARAM_STR);
+        $stmt->execute();
+
+        $tasks = [];
+        while ($taskData = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $tasks[] = new Task(
+                $taskData['titre'],
+                $taskData['description'],
+                [], 
+                $taskData['dateEcheance'],
+                $taskData['statut'],
+                $taskData['id']
+            );
+        }
+
+        return $tasks;
+
+    } catch (\PDOException $e) {
+        error_log('Erreur dans searchTasks : ' . $e->getMessage());
+        throw new \Exception('Erreur lors de la recherche des tâches : ' . $e->getMessage());
+    }
+}
+
 }

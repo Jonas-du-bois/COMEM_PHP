@@ -53,13 +53,14 @@ if (!empty($users)) {
         <?php
         // Définition des liens de navigation avec leurs labels et icônes associées
         $navLinks = [
-            'index.php' => '<i class="fas fa-home"></i> Accueil', // Icône maison pour la page d'accueil
-            'dashboard.php' => '<i class="fas fa-tachometer-alt"></i> Tableau de bord', // Icône tableau de bord
-            'ajouter_tache.php' => '<i class="fas fa-plus-circle"></i> Ajouter une tâche', // Icône plus
-            'taches_a_faire.php' => '<i class="fas fa-list-ul"></i> Tâches à faire', // Icône liste
-            'taches_en_cours.php' => '<i class="fas fa-spinner"></i> Tâches en cours', // Icône en cours
-            'taches_terminees.php' => '<i class="fas fa-check-circle"></i> Tâches terminées', // Icône check
-            'taches_partage.php' => '<i class="fas fa-share-alt"></i> Tâches partagées', // Icône partage
+            'index.php' => '<i class="fas fa-home"></i>  Accueil', // Icône maison pour la page d'accueil
+            'dashboard.php' => '<i class="fas fa-tachometer-alt"></i>  Tableau de bord', // Icône tableau de bord
+            'search_page.php' => '<i class="fas fa-search"></i>  Rechercher',
+            'ajouter_tache.php' => '<i class="fas fa-plus-circle"></i>  Ajouter une tâche', // Icône plus
+            'taches_a_faire.php' => '<i class="fas fa-list-ul"></i>  Tâches à faire', // Icône liste
+            'taches_en_cours.php' => '<i class="fas fa-spinner"></i>  Tâches en cours', // Icône en cours
+            'taches_terminees.php' => '<i class="fas fa-check-circle"></i>  Tâches terminées', // Icône check
+            'taches_partage.php' => '<i class="fas fa-share-alt"></i>  Tâches partagées', // Icône partage
         ];
 
         // Parcours les liens de navigation et les affiche dans la liste

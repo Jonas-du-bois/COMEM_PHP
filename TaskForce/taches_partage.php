@@ -66,7 +66,7 @@ $tachepartager = array_map('formatTaskData', $tachepartager);
     <title>Tâches partagées</title>
     <!-- Intégration de Bootstrap pour la mise en forme -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="style/styleSheet.css" rel="stylesheet"> <!-- Feuille de style personnalisée -->
+    <link href="style/styleSheet.css" rel="stylesheet"> 
 </head>
 
 <body>
