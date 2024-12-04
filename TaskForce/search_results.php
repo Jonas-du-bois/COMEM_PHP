@@ -61,10 +61,6 @@ if (!empty($query)) {
                     <div class="alert alert-warning" role="alert">
                         <p>Vous n'avez pas mis de terme de recherche, retournez sur la page de recheche</p>
                     </div>
-                    <!-- Bouton de retour -->
-                    <div class="mt-3 text-center">
-                        <a href="search_page.php" class="btn btn-primary">Rechercher autre chose</a>
-                    </div>
                 <?php else: ?>
 
                     <!-- Message si aucun résultat n'est trouvé -->
@@ -107,10 +103,12 @@ if (!empty($query)) {
                                 </tbody>
                             </table>
                         </div>
-
                     <?php endif; ?>
-
                 <?php endif; ?>
+                <!-- Bouton de retour -->
+                <div class="mt-3 text-center">
+                                <a href="search_page.php" class="btn btn-primary">Rechercher autre chose</a>
+                            </div>
             </div>
         </div>
     </div>
@@ -123,10 +121,12 @@ if (!empty($query)) {
     .table td {
         vertical-align: middle;
     }
+
     .badge {
         padding: 10px;
         text-align: center;
     }
+
     .text-truncate {
         white-space: nowrap;
         overflow: hidden;

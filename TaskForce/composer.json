@@ -3,7 +3,7 @@
     "description": "task manager",
     "autoload": {
         "psr-4": {
-            "M521\\Taskforce\\": ["src/", "src/dbManager/", "src/config/", "includes/" ]
+            "M521\\Taskforce\\": ["src/", "src/dbManager/", "src/config/", "includes/", "Includes/" ]
         }
     },
     "authors": [

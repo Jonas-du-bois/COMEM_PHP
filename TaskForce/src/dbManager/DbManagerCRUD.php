@@ -142,6 +142,37 @@ class DbManagerCRUD implements I_ApiCRUD
         }
     }
 
+    public function getUserById(int $userId): array
+    {
+        $sql = "SELECT * FROM users WHERE id = :userId;";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':userId', $userId, \PDO::PARAM_STR);
+
+        try {
+            $stmt->execute();
+            $donnees = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $tabUsers = [];
+
+            foreach ($donnees as $donneesUser) {
+                $user = new Users(
+                    $donneesUser["prenom"],
+                    $donneesUser["nom"],
+                    $donneesUser["email"],
+                    $donneesUser["noTel"],
+                    $donneesUser["motDePasse"],
+                    $donneesUser["id"]
+                );
+                $tabUsers[] = $user;
+            }
+
+            return $tabUsers;
+        } catch (\PDOException $e) {
+            // Log l'erreur ou la gérer d'une manière appropriée
+            error_log("Erreur lors de la récupération des utilisateurs : " . $e->getMessage());
+            return [];
+        }
+    }
+
     public function rendAllUtilisateur(): array
     {
         $sql = "SELECT * FROM users";

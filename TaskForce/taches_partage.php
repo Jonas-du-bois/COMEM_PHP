@@ -1,8 +1,8 @@
 <?php
-require_once 'vendor/autoload.php'; 
-require_once 'includes/functions.php'; 
+require_once 'vendor/autoload.php';
+require_once 'includes/functions.php';
 
-use M521\Taskforce\dbManager\DbManagerCRUD; 
+use M521\Taskforce\dbManager\DbManagerCRUD;
 
 // Création de l'objet DbManager pour interagir avec la base de données
 $dbManager = new DbManagerCRUD();
@@ -66,7 +66,7 @@ $tachepartager = array_map('formatTaskData', $tachepartager);
     <title>Tâches partagées</title>
     <!-- Intégration de Bootstrap pour la mise en forme -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="style/styleSheet.css" rel="stylesheet"> 
+    <link href="style/styleSheet.css" rel="stylesheet">
 </head>
 
 <body>
@@ -121,10 +121,12 @@ $tachepartager = array_map('formatTaskData', $tachepartager);
                                                 continue;
                                             }
                                         ?>
-                                            <span class="badge bg-primary me-1" data-bs-toggle="tooltip"
+                                            <a href="mailto:<?php echo htmlspecialchars($userEmailFromTask); ?>"
+                                                class="badge bg-primary me-1 text-decoration-none"
+                                                data-bs-toggle="tooltip"
                                                 title="<?php echo htmlspecialchars($userEmailFromTask); ?>">
                                                 <?php echo htmlspecialchars(strlen($userEmailFromTask) > 10 ? substr($userEmailFromTask, 0, 10) . '...' : $userEmailFromTask); ?>
-                                            </span>
+                                            </a>
                                         <?php endforeach; ?>
                                     </td>
                                 </tr>
