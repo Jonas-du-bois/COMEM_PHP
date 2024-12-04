@@ -102,6 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['task_id'], $_POST['st
                 ?>
 
                 <!-- Section des tâches -->
+                <?php include 'search_page.php'; ?>
                 <h4 class="text-secondary">Mes Tâches</h4>
 
                 <?php if (empty($taches)): ?>

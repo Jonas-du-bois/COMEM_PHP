@@ -54,6 +54,7 @@ if (!empty($query)) {
 
             <!-- Contenu principal -->
             <div class="main-content ms-auto col-md-9 col-lg-10 p-5">
+                
                 <h2 class="text-center mb-4">Résultats de recherche</h2>
 
                 <!-- Message si aucun terme de recherche n'est entré -->
@@ -107,7 +108,7 @@ if (!empty($query)) {
                 <?php endif; ?>
                 <!-- Bouton de retour -->
                 <div class="mt-3 text-center">
-                                <a href="search_page.php" class="btn btn-primary">Rechercher autre chose</a>
+                                <a href="dashboard.php" class="btn btn-primary">Rechercher autre chose</a>
                             </div>
             </div>
         </div>

@@ -53,14 +53,13 @@ if (!empty($users)) {
         <?php
         // Définition des liens de navigation avec leurs labels et icônes associées
         $navLinks = [
-            'index.php' => '<i class="fas fa-home"></i>  Accueil',
-            'search_page.php' => '<i class="fas fa-search"></i>  Rechercher',
-            'dashboard.php' => '<i class="fas fa-tachometer-alt"></i>  Tableau de bord',
-            'ajouter_tache.php' => '<i class="fas fa-plus-circle"></i>  Ajouter une tâche',
-            'taches_a_faire.php' => '<i class="fas fa-list-ul"></i>  Tâches à faire',
-            'taches_en_cours.php' => '<i class="fas fa-spinner"></i>  Tâches en cours',
-            'taches_terminees.php' => '<i class="fas fa-check-circle"></i>  Tâches terminées',
-            'taches_partage.php' => '<i class="fas fa-share-alt"></i>  Tâches partagées',
+            'index.php' => '<i class="fas fa-home pe-2"></i>  Accueil',
+            'dashboard.php' => '<i class="fas fa-tachometer-alt pe-2"></i>  Tableau de bord',
+            'ajouter_tache.php' => '<i class="fas fa-plus-circle pe-2"></i>  Ajouter une tâche',
+            'taches_a_faire.php' => '<i class="fas fa-list-ul pe-2"></i>  Tâches à faire',
+            'taches_en_cours.php' => '<i class="fas fa-spinner pe-2"></i>  Tâches en cours',
+            'taches_terminees.php' => '<i class="fas fa-check-circle pe-2"></i>  Tâches terminées',
+            'taches_partage.php' => '<i class="fas fa-share-alt pe-2"></i>  Tâches partagées',
         ];
 
         // Si l'utilisateur est l'admin (jonas.du.bois@outlook.com), ajoute un lien vers la page admin
