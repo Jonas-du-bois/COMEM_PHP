@@ -42,7 +42,7 @@ if (!empty($users)) {
 
     <div class="border-bottom">
         <!-- Titre de la section -->
-        <h4 class="mb-0">Gestion des tâches</h4>
+        <h4 class="mb-0 pt-3">Gestion des tâches</h4>
         
         <!-- Affiche le nom de l'utilisateur connecté -->
         <p class="mt-1"><?= htmlspecialchars($userName) ?></p>
@@ -53,14 +53,14 @@ if (!empty($users)) {
         <?php
         // Définition des liens de navigation avec leurs labels et icônes associées
         $navLinks = [
-            'index.php' => '<i class="fas fa-home"></i>  Accueil', // Icône maison pour la page d'accueil
-            'dashboard.php' => '<i class="fas fa-tachometer-alt"></i>  Tableau de bord', // Icône tableau de bord
-            'search_page.php' => '<i class="fas fa-search"></i>  Rechercher',
-            'ajouter_tache.php' => '<i class="fas fa-plus-circle"></i>  Ajouter une tâche', // Icône plus
-            'taches_a_faire.php' => '<i class="fas fa-list-ul"></i>  Tâches à faire', // Icône liste
-            'taches_en_cours.php' => '<i class="fas fa-spinner"></i>  Tâches en cours', // Icône en cours
-            'taches_terminees.php' => '<i class="fas fa-check-circle"></i>  Tâches terminées', // Icône check
-            'taches_partage.php' => '<i class="fas fa-share-alt"></i>  Tâches partagées', // Icône partage
+            'index.php' => '<i class="fas fa-home pe-2"></i>  Accueil', // Icône maison pour la page d'accueil
+            'dashboard.php' => '<i class="fas fa-tachometer-alt pe-2"></i>  Tableau de bord', // Icône tableau de bord
+            'search_page.php' => '<i class="fas fa-search pe-2"></i>  Rechercher',
+            'ajouter_tache.php' => '<i class="fas fa-plus-circle pe-2"></i>  Ajouter une tâche', // Icône plus
+            'taches_a_faire.php' => '<i class="fas fa-list-ul pe-2"></i>  Tâches à faire', // Icône liste
+            'taches_en_cours.php' => '<i class="fas fa-spinner pe-2"></i>  Tâches en cours', // Icône en cours
+            'taches_terminees.php' => '<i class="fas fa-check-circle pe-2"></i>  Tâches terminées', // Icône check
+            'taches_partage.php' => '<i class="fas fa-share-alt pe-2"></i>  Tâches partagées', // Icône partage
         ];
 
         // Parcours les liens de navigation et les affiche dans la liste
@@ -78,12 +78,12 @@ if (!empty($users)) {
     <div class="mt-auto border-top pt-3">
         <!-- Lien vers le profil avec une classe active si la page actuelle est 'profile.php' -->
         <a href="profile.php" class="nav-link text-white pb-3<?= basename($_SERVER['PHP_SELF']) == 'profile.php' ? ' active' : '' ?>">
-            <i class="fas fa-user"></i> Mon Profil
+            <i class="fas fa-user pe-2"></i> Mon Profil
         </a>
         
         <!-- Lien de déconnexion avec une icône -->
         <a href="logout.php" class="nav-link text-white pb-3">
-            <i class="fas fa-sign-out-alt"></i> Se déconnecter
+            <i class="fas fa-sign-out-alt pe-2"></i> Se déconnecter
         </a>
     </div>
 </div>
