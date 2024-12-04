@@ -42,7 +42,7 @@ if (!empty($users)) {
 
     <div class="border-bottom">
         <!-- Titre de la section -->
-        <h4 class="mb-0">Gestion des tâches</h4>
+        <h4 class="mb-0 pt-3">Gestion des tâches</h4>
         
         <!-- Affiche le nom de l'utilisateur connecté -->
         <p class="mt-1"><?= htmlspecialchars($userName) ?></p>
@@ -83,12 +83,12 @@ if (!empty($users)) {
     <div class="mt-auto border-top pt-3">
         <!-- Lien vers le profil avec une classe active si la page actuelle est 'profile.php' -->
         <a href="profile.php" class="nav-link text-white pb-3<?= basename($_SERVER['PHP_SELF']) == 'profile.php' ? ' active' : '' ?>">
-            <i class="fas fa-user"></i> Mon Profil
+            <i class="fas fa-user pe-2"></i> Mon Profil
         </a>
         
         <!-- Lien de déconnexion avec une icône -->
         <a href="logout.php" class="nav-link text-white pb-3">
-            <i class="fas fa-sign-out-alt"></i> Se déconnecter
+            <i class="fas fa-sign-out-alt pe-2"></i> Se déconnecter
         </a>
     </div>
 </div>
